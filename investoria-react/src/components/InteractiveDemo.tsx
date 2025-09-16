@@ -422,6 +422,11 @@ export default function InteractiveDemo() {
   const handleDragStart = (e: React.DragEvent, item: any, itemType: TileType) => {
     e.dataTransfer.setData('application/json', JSON.stringify({ item, itemType }));
     e.dataTransfer.effectAllowed = 'copy';
+    
+    // Add visual feedback - make the dragged element slightly transparent
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '0.7';
+    }
   };
 
   const [draggedOver, setDraggedOver] = useState<number | null>(null);
@@ -478,6 +483,13 @@ export default function InteractiveDemo() {
     }
 
     setGrid(newGrid);
+  };
+
+  const handleDragEnd = (e: React.DragEvent) => {
+    // Reset opacity
+    if (e.currentTarget instanceof HTMLElement) {
+      e.currentTarget.style.opacity = '1';
+    }
   };
 
 
@@ -546,11 +558,17 @@ export default function InteractiveDemo() {
                       key={building.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, building, 'building')}
+                      onDragEnd={handleDragEnd}
                       onClick={() => handleStepPlacement(building)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-colors duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95"
+                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 select-none"
                     >
-                      <img src={building.emoji} alt={building.name} className="w-full h-8 object-contain mb-1 pointer-events-none" />
-                      <div className="text-xs text-center text-gold-400 font-medium">{building.name}</div>
+                      <img 
+                        src={building.emoji} 
+                        alt={building.name} 
+                        className="w-full h-8 object-contain mb-1 pointer-events-none drag-none" 
+                        draggable={false}
+                      />
+                      <div className="text-xs text-center text-gold-400 font-medium pointer-events-none">{building.name}</div>
                     </div>
                   ))}
                 </div>
@@ -592,10 +610,16 @@ export default function InteractiveDemo() {
                       key={item.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, item, 'terrain')}
+                      onDragEnd={handleDragEnd}
                       onClick={() => handleStepPlacement(item)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95"
+                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 select-none"
                     >
-                      <div className="text-lg text-center pointer-events-none">{item.emoji}</div>
+                      <img 
+                        src={item.emoji} 
+                        alt={item.name} 
+                        className="w-full h-6 object-contain pointer-events-none drag-none" 
+                        draggable={false}
+                      />
                     </div>
                   ))}
                   {currentStep === 'pet' && pets.map((pet) => (
@@ -603,10 +627,16 @@ export default function InteractiveDemo() {
                       key={pet.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, pet, 'pet')}
+                      onDragEnd={handleDragEnd}
                       onClick={() => handleStepPlacement(pet)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95 text-center"
+                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 text-center select-none"
                     >
-                      <div className="text-lg pointer-events-none">{pet.emoji}</div>
+                      <img 
+                        src={pet.emoji} 
+                        alt={pet.name} 
+                        className="w-full h-6 object-contain pointer-events-none drag-none" 
+                        draggable={false}
+                      />
                     </div>
                   ))}
                 </div>
@@ -685,6 +715,7 @@ export default function InteractiveDemo() {
                       key={item.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, item, 'building')}
+                    onDragEnd={handleDragEnd}
                     onClick={() => handleStepPlacement(item)}
                     className="aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-gold-400/30 overflow-hidden"
                     >
@@ -760,6 +791,7 @@ export default function InteractiveDemo() {
                           key={item.id}
                           draggable
                           onDragStart={(e) => handleDragStart(e, item, 'terrain')}
+                          onDragEnd={handleDragEnd}
                           onClick={() => handleStepPlacement(item)}
                           className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-yellow-400/60 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
@@ -782,6 +814,7 @@ export default function InteractiveDemo() {
                           key={item.id}
                           draggable
                           onDragStart={(e) => handleDragStart(e, item, 'pet')}
+                          onDragEnd={handleDragEnd}
                           onClick={() => handleStepPlacement(item)}
                           className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-yellow-400/60 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
