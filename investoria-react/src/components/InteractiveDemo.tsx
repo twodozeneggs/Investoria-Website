@@ -493,15 +493,141 @@ export default function InteractiveDemo() {
         </p>
       </div>
 
-      {/* Side-by-Side Layout */}
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
-        {/* Left Side - Single Step Card with Transitions */}
-        <div className="relative">
-          {/* Background decoration */}
-          <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
-          <div className="absolute top-1/2 -left-8 w-24 h-24 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
-          
-          <div className="relative bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] h-[500px] overflow-hidden">
+      {/* Mobile-Optimized Layout */}
+      <div className="space-y-6">
+        {/* Mobile: Compact Instructions at Top */}
+        <div className="lg:hidden">
+          <div className="bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-2xl p-4 shadow-lg">
+            {/* Mobile Progress Indicator */}
+            {currentStep !== 'complete' && (
+              <div className="flex justify-center mb-4">
+                <div className="flex items-center">
+                  {[1, 2, 3].map((step) => (
+                    <div key={step} className="flex items-center">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-500 border-2 ${
+                        (step === 1 && placedBuilding) ||
+                        (step === 2 && placedTerrain) ||
+                        (step === 3 && placedPet)
+                          ? 'bg-yellow-400 text-green-900 border-yellow-400'
+                          : (step === 1 && currentStep === 'building') ||
+                            (step === 2 && currentStep === 'terrain') ||
+                            (step === 3 && currentStep === 'pet')
+                            ? 'bg-transparent text-yellow-400 border-yellow-400'
+                            : 'bg-transparent text-yellow-400/50 border-yellow-400/30'
+                      }`}>
+                        {(step === 1 && placedBuilding) ||
+                         (step === 2 && placedTerrain) ||
+                         (step === 3 && placedPet)
+                          ? '✓'
+                          : step
+                        }
+                      </div>
+                      {step < 3 && (
+                        <div className={`w-12 h-1 rounded-full transition-all duration-700 ${
+                          (step === 1 && placedBuilding) || (step === 2 && placedTerrain)
+                            ? 'bg-yellow-400'
+                            : 'bg-yellow-400/20'
+                        }`}></div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Mobile: Compact Step Content */}
+            {currentStep === 'building' && (
+              <div className="text-center">
+                <div className="text-lg font-bold text-gold-400 mb-2">Choose Your Building</div>
+                <p className="text-investoria-muted text-sm mb-4">Drag a building to the center grid to start your city</p>
+                <div className="grid grid-cols-3 gap-2">
+                  {stockBuildings.map((building) => (
+                    <div
+                      key={building.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, building, 'building')}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20"
+                    >
+                      <img src={building.emoji} alt={building.name} className="w-full h-8 object-contain mb-1" />
+                      <div className="text-xs text-center text-gold-400 font-medium">{building.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {(currentStep === 'terrain' || currentStep === 'pet') && (
+              <div className="text-center">
+                <div className="text-lg font-bold text-gold-400 mb-2">Decorate Your City</div>
+                <p className="text-investoria-muted text-sm mb-4">Add terrain and city life to make it unique!</p>
+                
+                {/* Mobile Toggle Buttons */}
+                <div className="flex justify-center mb-4 gap-2">
+                  <button
+                    onClick={() => switchToStep('terrain')}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                      currentStep === 'terrain'
+                        ? 'bg-yellow-400 text-green-900'
+                        : 'bg-green-800/30 text-yellow-400/90 border border-yellow-400/30'
+                    }`}
+                  >
+                    Terrain
+                  </button>
+                  <button
+                    onClick={() => switchToStep('pet')}
+                    className={`px-3 py-1 rounded-lg text-sm font-medium ${
+                      currentStep === 'pet'
+                        ? 'bg-yellow-400 text-green-900'
+                        : 'bg-green-800/30 text-yellow-400/90 border border-yellow-400/30'
+                    }`}
+                  >
+                    City Life
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-4 gap-2">
+                  {currentStep === 'terrain' && terrainItems.map((item) => (
+                    <div
+                      key={item.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, item, 'terrain')}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20"
+                    >
+                      <div className="text-lg text-center">{item.emoji}</div>
+                    </div>
+                  ))}
+                  {currentStep === 'pet' && pets.map((pet) => (
+                    <div
+                      key={pet.id}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, pet, 'pet')}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20 text-center"
+                    >
+                      <div className="text-lg">{pet.emoji}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentStep === 'complete' && (
+              <div className="text-center">
+                <div className="text-lg font-bold text-gold-400 mb-2">🎉 City Complete!</div>
+                <p className="text-investoria-muted text-sm">Tap any building to see stock information</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Desktop: Side-by-Side Layout */}
+        <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+          {/* Left Side - Desktop Instructions */}
+          <div className="relative">
+            {/* Background decoration */}
+            <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
+            <div className="absolute top-1/2 -left-8 w-24 h-24 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div className="relative bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] h-[500px] overflow-hidden">
           {/* Step Progress Indicator - Hidden when complete */}
           {currentStep !== 'complete' && (
             <div className="flex justify-center mb-8">
@@ -864,10 +990,20 @@ export default function InteractiveDemo() {
           </div>
         </div>
 
-        {/* Right Side - Interactive Grid */}
-        <div className="flex items-center justify-center h-[500px]">
-          <div className="grid grid-cols-3 gap-0 w-full max-w-lg aspect-square rounded-lg overflow-hidden shadow-lg">
-            {grid.map((tile, index) => renderGridTile(tile, index))}
+          {/* Right Side - Desktop Interactive Grid */}
+          <div className="flex items-center justify-center h-[500px]">
+            <div className="grid grid-cols-3 gap-0 w-full max-w-lg aspect-square rounded-lg overflow-hidden shadow-lg">
+              {grid.map((tile, index) => renderGridTile(tile, index))}
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile: Interactive Grid */}
+        <div className="lg:hidden flex justify-center">
+          <div className="w-full max-w-sm">
+            <div className="grid grid-cols-3 gap-0 aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20">
+              {grid.map((tile, index) => renderGridTile(tile, index))}
+            </div>
           </div>
         </div>
       </div>
