@@ -77,7 +77,7 @@ export default function InteractiveDemo() {
     {
       id: 'financial',
       symbol: 'XLF',
-      name: 'Financial Sector',
+      name: 'Financial',
       price: '$28.75',
       change: '+0.45',
       changePercent: '+1.59%',
@@ -105,7 +105,7 @@ export default function InteractiveDemo() {
     {
       id: 'energy',
       symbol: 'XLE',
-      name: 'Energy Sector',
+      name: 'Energy',
       price: '$24.00',
       change: '+0.60',
       changePercent: '+2.56%',
@@ -133,7 +133,7 @@ export default function InteractiveDemo() {
     {
       id: 'healthcare',
       symbol: 'XLV',
-      name: 'Healthcare Sector',
+      name: 'Healthcare',
       price: '$31.50',
       change: '-0.25',
       changePercent: '-0.79%',
@@ -161,7 +161,7 @@ export default function InteractiveDemo() {
     {
       id: 'industrial',
       symbol: 'XLI',
-      name: 'Industrial Sector',
+      name: 'Industrial',
       price: '$26.85',
       change: '+0.35',
       changePercent: '+1.32%',
@@ -189,7 +189,7 @@ export default function InteractiveDemo() {
     {
       id: 'commercial',
       symbol: 'XLY',
-      name: 'Consumer Sector',
+      name: 'Consumer',
       price: '$22.90',
       change: '+0.75',
       changePercent: '+3.38%',
@@ -217,7 +217,7 @@ export default function InteractiveDemo() {
     {
       id: 'materials',
       symbol: 'XLB',
-      name: 'Materials Sector',
+      name: 'Materials',
       price: '$19.40',
       change: '+0.15',
       changePercent: '+0.78%',
@@ -547,25 +547,27 @@ export default function InteractiveDemo() {
             {/* Step 1 - Buildings */}
             {currentStep === 'building' && (
               <div className="animate-fade-in">
-                <div className="text-center mb-6">
+                <div className="text-center mb-8">
                   <div className="text-xl font-bold text-gold-400">Choose Your Building</div>
                 </div>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-3 gap-x-2 gap-y-6">
                   {stockBuildings.map((item) => (
                     <div
                       key={item.id}
                     draggable
                     onDragStart={(e) => handleDragStart(e, item, 'building')}
                     onClick={() => handleStepPlacement(item)}
-                    className="aspect-square rounded-lg bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-gold-400/30"
+                    className="aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-gold-400/30 overflow-hidden"
                     >
-                      <img 
-                        src={item.emoji} 
-                        alt={item.name}
-                        className="w-full h-full object-contain group-hover:scale-110 transition-transform pixelated pointer-events-none"
-                        style={{ imageRendering: 'pixelated' }}
-                      />
-                      <span className="text-[9px] text-gold-400 font-medium text-center leading-tight pointer-events-none px-1 truncate">
+                      <div className="flex-1 flex items-center justify-center w-full">
+                        <img 
+                          src={item.emoji} 
+                          alt={item.name}
+                          className="w-full h-full object-contain group-hover:scale-110 transition-transform pixelated pointer-events-none rounded-lg"
+                          style={{ imageRendering: 'pixelated' }}
+                        />
+                      </div>
+                      <span className="text-xs text-white font-semibold text-center leading-tight pointer-events-none px-1 flex-shrink-0">
                         {item.name}
                       </span>
                     </div>
