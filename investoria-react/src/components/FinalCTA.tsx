@@ -166,7 +166,7 @@ export default function FinalCTA() {
                       id="platform"
                       name="platform"
                       defaultValue=""
-                      onChange={(e) => {
+                      onChange={() => {
                         if (errors.platform) {
                           setErrors(prev => ({...prev, platform: undefined}));
                         }

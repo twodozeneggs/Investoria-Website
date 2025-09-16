@@ -7,7 +7,7 @@ interface LazyImageProps {
   placeholder?: string;
 }
 
-export default function LazyImage({ src, alt, className = '', placeholder }: LazyImageProps) {
+export default function LazyImage({ src, alt, className = '' }: LazyImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
 

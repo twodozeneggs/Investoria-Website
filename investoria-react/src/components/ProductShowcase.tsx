@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import LazyImage from './LazyImage';
 
 export default function ProductShowcase() {
   const showcaseItems = [
