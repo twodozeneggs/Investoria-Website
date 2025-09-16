@@ -137,7 +137,7 @@ export default function ProductShowcase() {
 
   return (
     <section className="max-w-7xl mx-auto px-4 py-20">
-      <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative grid lg:grid-cols-2 gap-12 items-center">
         {/* iPhone Screenshots - Left Side */}
         <div className="flex justify-center lg:justify-end">
           <img 
@@ -147,6 +147,22 @@ export default function ProductShowcase() {
               isAnimating ? 'opacity-0' : 'opacity-100'
             }`}
           />
+        </div>
+
+        {/* Center Navigation Dots - Between Image and Text */}
+        <div className="hidden lg:flex flex-col items-center justify-center gap-4 absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          {showcaseItems.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
+                index === currentIndex 
+                  ? 'bg-gold-400 shadow-lg shadow-gold-400/50 ring-2 ring-gold-400/30' 
+                  : 'bg-gold-400/40 hover:bg-gold-400/70 border border-gold-400/50'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
         </div>
 
         {/* Content - Right Side */}
@@ -191,8 +207,8 @@ export default function ProductShowcase() {
             </div>
           </div>
           
-          {/* Navigation Dots */}
-          <div className="flex justify-center mt-8 gap-3">
+          {/* Navigation Dots - Mobile Only */}
+          <div className="flex lg:hidden justify-center mt-8 gap-3">
             {showcaseItems.map((_, index) => (
               <button
                 key={index}
