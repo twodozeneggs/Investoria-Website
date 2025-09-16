@@ -12,7 +12,7 @@ export default function Hero() {
           </h1>
           
           <p className="mt-4 sm:mt-6 text-investoria-muted text-base sm:text-lg lg:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            Investoria turns investing into a living city. Each stock or ETF you choose becomes a building that grows and evolves over time — teaching you real investing habits without the jargon.
+            Investoria turns investing into a living city. Each stock or ETF you choose becomes a building that grows and evolves over time — teaching you real investing habits in an approachable way.
           </p>
           
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -50,7 +50,7 @@ export default function Hero() {
           </div>
           
           <p className="mt-6 text-xs text-investoria-muted/70">
-            Educational & fun. No financial advice.
+            Educational & fun. not financial advice.
           </p>
         </div>
 

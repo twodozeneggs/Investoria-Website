@@ -75,7 +75,7 @@ export default function Features() {
           Investing Meets Gaming
         </h2>
         <p className="text-investoria-muted text-lg max-w-2xl mx-auto">
-          Investoria transforms how you view and interact with your investments through these unique features
+          Investoria transforms how you view and interact with your investments
         </p>
       </div>
 

@@ -114,7 +114,7 @@ export default function FinalCTA() {
           </h2>
           <p className="text-investoria-muted text-lg lg:text-xl max-w-2xl mx-auto leading-relaxed">
             Join the waitlist and be among the first to experience investing like never before. 
-            <span className="text-gold-400 font-semibold">Early access starts soon.</span>
+            <span className="text-gold-400 font-semibold"> Early access starts soon.</span>
           </p>
         </div>
 
@@ -180,7 +180,6 @@ export default function FinalCTA() {
                       <option value="" disabled>Choose platform</option>
                       <option value="ios">iOS</option>
                       <option value="android">Android</option>
-                      <option value="both">Both</option>
                     </select>
                     <div className="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
                       <svg className="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -241,39 +240,6 @@ export default function FinalCTA() {
                 </p>
               </div>
             )}
-          </div>
-        </div>
-        
-        {/* Trust indicators */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center mb-8">
-          <div className="space-y-3">
-            <div className="w-12 h-12 bg-gold-400/10 rounded-xl flex items-center justify-center mx-auto">
-              <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-              </svg>
-            </div>
-            <h4 className="text-gold-400 font-semibold">Secure & Private</h4>
-            <p className="text-investoria-muted text-sm">Your data is encrypted and never shared</p>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="w-12 h-12 bg-gold-400/10 rounded-xl flex items-center justify-center mx-auto">
-              <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h4 className="text-gold-400 font-semibold">Early Access</h4>
-            <p className="text-investoria-muted text-sm">Be first to experience the future of investing</p>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="w-12 h-12 bg-gold-400/10 rounded-xl flex items-center justify-center mx-auto">
-              <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M12 2.25a9.75 9.75 0 100 19.5 9.75 9.75 0 000-19.5z" />
-              </svg>
-            </div>
-            <h4 className="text-gold-400 font-semibold">No Commitment</h4>
-            <p className="text-investoria-muted text-sm">Unsubscribe anytime, no strings attached</p>
           </div>
         </div>
         
