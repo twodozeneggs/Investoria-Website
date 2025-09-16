@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function ProductShowcase() {
   const showcaseItems = [
     {
       id: 1,
-      screenshot: "/main-screenshot.png",
+      screenshot: "./main-screenshot.png",
       title: "Build Your Investment City",
       subtitle: "Watch your portfolio come to life",
       description: "Every stock and ETF you invest in becomes a building in your personal city. Watch your investments grow from small structures to towering skyscrapers as your portfolio expands.",
@@ -16,7 +16,7 @@ export default function ProductShowcase() {
     },
     {
       id: 2,
-      screenshot: "/401k-screenshot.png", 
+      screenshot: "./401k-screenshot.png", 
       title: "Smart Retirement Planning",
       subtitle: "401(k) tracking made simple",
       description: "Connect your retirement accounts and see how your long-term investments are building your future city. Track contributions, employer matches, and growth over time.",
@@ -28,7 +28,7 @@ export default function ProductShowcase() {
     },
     {
       id: 3,
-      screenshot: "/charity-screenshot.png",
+      screenshot: "./charity-screenshot.png",
       title: "Give Back While You Grow",
       subtitle: "Impact investing simplified", 
       description: "Build not just wealth, but positive impact. See how your charitable contributions and impact investments are making a difference in your community.",

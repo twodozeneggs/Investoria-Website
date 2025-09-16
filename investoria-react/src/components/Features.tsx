@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Features() {
   const features = [
@@ -72,7 +71,7 @@ export default function Features() {
 
       {/* Features grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((feature, index) => (
+        {features.map((feature) => (
           <article
             key={feature.title}
             className="group"

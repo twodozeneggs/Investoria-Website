@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Screenshots() {
   const screenshots = [
     { 
       id: 1,
-      src: "/main-screenshot.png",
+      src: "./main-screenshot.png",
       title: "Build your investment city", 
       caption: "Watch your portfolio grow into a beautiful, thriving city",
     },
     { 
       id: 2,
-      src: "/401k-screenshot.png",
+      src: "./401k-screenshot.png",
       title: "Smart investment tracking", 
       caption: "Track your 401k and investments with intuitive visuals",
     },
     { 
       id: 3,
-      src: "/charity-screenshot.png",
+      src: "./charity-screenshot.png",
       title: "Make an impact", 
       caption: "Give back to causes you care about while building wealth",
     },

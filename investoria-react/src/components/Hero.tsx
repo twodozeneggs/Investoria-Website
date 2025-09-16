@@ -1,4 +1,3 @@
-import React from 'react';
 
 export default function Hero() {
   return (
@@ -41,7 +40,7 @@ export default function Hero() {
 
         <div className="lg:order-last">
           <img 
-            src="/Demo-collection.png" 
+            src="./Demo-collection.png" 
             alt="Investoria app demo collection showing multiple phone screens"
             className="w-full max-w-lg mx-auto"
           />
