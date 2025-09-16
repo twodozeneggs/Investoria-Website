@@ -539,16 +539,17 @@ export default function InteractiveDemo() {
             {currentStep === 'building' && (
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">Choose Your Building</div>
-                <p className="text-investoria-muted text-sm mb-4">Drag a building to the center grid to start your city</p>
+                <p className="text-investoria-muted text-sm mb-4">Tap or drag a building to start your city</p>
                 <div className="grid grid-cols-3 gap-2">
                   {stockBuildings.map((building) => (
                     <div
                       key={building.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, building, 'building')}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20"
+                      onClick={() => handleStepPlacement(building)}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-colors duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95"
                     >
-                      <img src={building.emoji} alt={building.name} className="w-full h-8 object-contain mb-1" />
+                      <img src={building.emoji} alt={building.name} className="w-full h-8 object-contain mb-1 pointer-events-none" />
                       <div className="text-xs text-center text-gold-400 font-medium">{building.name}</div>
                     </div>
                   ))}
@@ -559,7 +560,7 @@ export default function InteractiveDemo() {
             {(currentStep === 'terrain' || currentStep === 'pet') && (
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">Decorate Your City</div>
-                <p className="text-investoria-muted text-sm mb-4">Add terrain and city life to make it unique!</p>
+                <p className="text-investoria-muted text-sm mb-4">Tap or drag items to make your city unique!</p>
                 
                 {/* Mobile Toggle Buttons */}
                 <div className="flex justify-center mb-4 gap-2">
@@ -591,9 +592,10 @@ export default function InteractiveDemo() {
                       key={item.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, item, 'terrain')}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20"
+                      onClick={() => handleStepPlacement(item)}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95"
                     >
-                      <div className="text-lg text-center">{item.emoji}</div>
+                      <div className="text-lg text-center pointer-events-none">{item.emoji}</div>
                     </div>
                   ))}
                   {currentStep === 'pet' && pets.map((pet) => (
@@ -601,9 +603,10 @@ export default function InteractiveDemo() {
                       key={pet.id}
                       draggable
                       onDragStart={(e) => handleDragStart(e, pet, 'pet')}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-move hover:bg-green-600/50 transition-colors duration-200 border border-gold-400/20 text-center"
+                      onClick={() => handleStepPlacement(pet)}
+                      className="bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/40 hover:scale-105 active:scale-95 text-center"
                     >
-                      <div className="text-lg">{pet.emoji}</div>
+                      <div className="text-lg pointer-events-none">{pet.emoji}</div>
                     </div>
                   ))}
                 </div>
