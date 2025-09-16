@@ -14,18 +14,24 @@ export default function Footer() {
 
         {/* Navigation */}
         <nav className="flex items-center gap-8" aria-label="Footer navigation">
-          <a 
-            href="/terms" 
-            className="text-investoria-muted hover:text-gold-400 transition-colors duration-200 font-medium"
+          <button 
+            onClick={() => {
+              window.history.pushState({}, '', '/Investoria-Website/terms');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="text-investoria-muted hover:text-gold-400 transition-colors duration-200 font-medium cursor-pointer"
           >
             Terms
-          </a>
-          <a 
-            href="/privacy" 
-            className="text-investoria-muted hover:text-gold-400 transition-colors duration-200 font-medium"
+          </button>
+          <button 
+            onClick={() => {
+              window.history.pushState({}, '', '/Investoria-Website/privacy');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="text-investoria-muted hover:text-gold-400 transition-colors duration-200 font-medium cursor-pointer"
           >
             Privacy
-          </a>
+          </button>
           <a 
             href="mailto:hello@investoria.app" 
             className="text-investoria-muted hover:text-gold-400 transition-colors duration-200 flex items-center gap-2 font-medium"

@@ -4,15 +4,18 @@ export default function PrivacyPolicy() {
       {/* Header */}
       <div className="max-w-4xl mx-auto px-4 pt-8 pb-4">
         <div className="flex items-center justify-between">
-          <a 
-            href="/" 
-            className="text-gold-400 hover:text-gold-300 transition-colors duration-200 flex items-center gap-2"
+          <button 
+            onClick={() => {
+              window.history.pushState({}, '', '/Investoria-Website/');
+              window.dispatchEvent(new PopStateEvent('popstate'));
+            }}
+            className="text-gold-400 hover:text-gold-300 transition-colors duration-200 flex items-center gap-2 cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
             Back to Investoria
-          </a>
+          </button>
           <span className="font-cinzel font-bold text-gold-400 text-lg">INVESTORIA</span>
         </div>
       </div>

@@ -25,12 +25,12 @@ export default function InvestoriaLanding() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Handle routing
-  if (currentPath === '/terms') {
+  // Handle routing - account for GitHub Pages base path
+  if (currentPath === '/Investoria-Website/terms' || currentPath === '/terms') {
     return <TermsOfService />;
   }
   
-  if (currentPath === '/privacy') {
+  if (currentPath === '/Investoria-Website/privacy' || currentPath === '/privacy') {
     return <PrivacyPolicy />;
   }
 
