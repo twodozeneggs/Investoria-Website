@@ -3,14 +3,41 @@ import React, { useState } from 'react';
 export default function FinalCTA() {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [errors, setErrors] = useState<{email?: string; platform?: string}>({});
+  const [email, setEmail] = useState('');
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
+    setErrors({});
     
     const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
+    const emailValue = formData.get('email') as string;
     const platform = formData.get('platform') as string;
+    
+    // Validation
+    const newErrors: {email?: string; platform?: string} = {};
+    
+    if (!emailValue?.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!validateEmail(emailValue)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    if (!platform) {
+      newErrors.platform = 'Please select a platform';
+    }
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+    
+    setIsLoading(true);
     
     try {
       console.log('Submitting email to Mailchimp:', email, 'Platform:', platform);
@@ -106,12 +133,27 @@ export default function FinalCTA() {
                       type="email"
                       id="email"
                       name="email"
-                      required
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) {
+                          setErrors(prev => ({...prev, email: undefined}));
+                        }
+                      }}
                       placeholder="you@example.com"
-                      className="w-full rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-gold-400/20 px-6 py-4 placeholder:text-investoria-muted/60 text-investoria-text focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/15 transition-all duration-300 text-lg group-hover:ring-gold-400/30"
+                      className={`w-full rounded-2xl bg-white/10 backdrop-blur-sm ring-1 px-6 py-4 placeholder:text-investoria-muted/60 text-investoria-text focus:outline-none focus:ring-2 focus:bg-white/15 transition-all duration-300 text-lg group-hover:ring-gold-400/30 ${
+                        errors.email 
+                          ? 'ring-red-400/60 focus:ring-red-400' 
+                          : 'ring-gold-400/20 focus:ring-gold-400'
+                      }`}
                     />
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gold-400/0 via-gold-400/5 to-gold-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                   </div>
+                  {errors.email && (
+                    <p className="mt-2 text-red-400 text-sm font-medium animate-pulse">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
                 
                 {/* Platform selection */}
@@ -123,9 +165,17 @@ export default function FinalCTA() {
                     <select
                       id="platform"
                       name="platform"
-                      required
                       defaultValue=""
-                      className="w-full rounded-2xl bg-white/10 backdrop-blur-sm ring-1 ring-gold-400/20 px-6 py-4 text-investoria-text focus:outline-none focus:ring-2 focus:ring-gold-400 focus:bg-white/15 transition-all duration-300 text-lg appearance-none group-hover:ring-gold-400/30"
+                      onChange={(e) => {
+                        if (errors.platform) {
+                          setErrors(prev => ({...prev, platform: undefined}));
+                        }
+                      }}
+                      className={`w-full rounded-2xl bg-white/10 backdrop-blur-sm ring-1 px-6 py-4 text-investoria-text focus:outline-none focus:ring-2 focus:bg-white/15 transition-all duration-300 text-lg appearance-none group-hover:ring-gold-400/30 ${
+                        errors.platform 
+                          ? 'ring-red-400/60 focus:ring-red-400' 
+                          : 'ring-gold-400/20 focus:ring-gold-400'
+                      }`}
                     >
                       <option value="" disabled>Choose platform</option>
                       <option value="ios">iOS</option>
@@ -139,6 +189,11 @@ export default function FinalCTA() {
                     </div>
                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-gold-400/0 via-gold-400/5 to-gold-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
                   </div>
+                  {errors.platform && (
+                    <p className="mt-2 text-red-400 text-sm font-medium animate-pulse">
+                      {errors.platform}
+                    </p>
+                  )}
                 </div>
               </div>
               

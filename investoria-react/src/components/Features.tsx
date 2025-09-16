@@ -1,5 +1,9 @@
 
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+
 export default function Features() {
+  const { ref: sectionRef, isVisible } = useScrollAnimation(0.1);
+  
   const features = [
     {
       title: "Real Stock Investing",
@@ -57,7 +61,13 @@ export default function Features() {
   };
 
   return (
-    <section id="features" className="py-20">
+    <section 
+      id="features" 
+      ref={sectionRef}
+      className={`py-20 transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+    >
       <div className="max-w-6xl mx-auto px-4">
       {/* Section header */}
       <div className="text-center mb-16">
@@ -71,22 +81,29 @@ export default function Features() {
 
       {/* Features grid */}
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {features.map((feature) => (
+        {features.map((feature, index) => (
           <article
             key={feature.title}
-            className="group"
+            className={`group transition-all duration-700 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+            }`}
+            style={{ 
+              transitionDelay: isVisible ? `${index * 150}ms` : '0ms' 
+            }}
           >
-            <div className="bg-white rounded-2xl p-8 h-full transition-all duration-300 hover:transform hover:-translate-y-2 hover:shadow-xl shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl p-8 h-full transition-all duration-500 hover:transform hover:-translate-y-3 hover:shadow-2xl hover:shadow-gold-400/20 shadow-lg border border-gray-100 hover:border-gold-400/30 group-hover:bg-gradient-to-br group-hover:from-white group-hover:to-gold-50/30 cursor-pointer">
               {/* Feature icon */}
-              <div className="flex justify-center mb-6">
-                {renderIcon(feature.icon)}
+              <div className="flex justify-center mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="p-4 rounded-xl bg-gold-400/10 group-hover:bg-gold-400/20 transition-colors duration-300">
+                  {renderIcon(feature.icon)}
+                </div>
               </div>
               
               {/* Feature content */}
-              <h3 className="font-bold text-xl text-gray-800 mb-4 text-center leading-tight">
+              <h3 className="font-bold text-xl text-gray-800 group-hover:text-gold-600 mb-4 text-center leading-tight transition-colors duration-300">
                 {feature.title}
               </h3>
-              <p className="text-gray-600 leading-relaxed text-center">
+              <p className="text-gray-600 group-hover:text-gray-700 leading-relaxed text-center transition-colors duration-300">
                 {feature.body}
               </p>
             </div>

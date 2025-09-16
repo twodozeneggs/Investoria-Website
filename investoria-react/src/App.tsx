@@ -1,6 +1,7 @@
 import Header from './components/Header';
 import Hero from './components/Hero';
 import ProductShowcase from './components/ProductShowcase';
+import InteractiveDemo from './components/InteractiveDemo';
 import Features from './components/Features';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
@@ -21,6 +22,7 @@ export default function InvestoriaLanding() {
       <main>
         <Hero />
         <ProductShowcase />
+        <InteractiveDemo />
         <Features />
         <FinalCTA />
       </main>

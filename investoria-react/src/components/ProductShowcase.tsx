@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import LazyImage from './LazyImage';
 
 export default function ProductShowcase() {
   const showcaseItems = [
@@ -43,6 +45,7 @@ export default function ProductShowcase() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const { ref: sectionRef, isVisible } = useScrollAnimation(0.2);
 
   useEffect(() => {
     if (isPaused) return;
@@ -136,7 +139,12 @@ export default function ProductShowcase() {
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 py-20">
+    <section 
+      ref={sectionRef}
+      className={`max-w-7xl mx-auto px-4 py-20 transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+    >
       <div className="relative grid lg:grid-cols-2 gap-12 items-center">
         {/* iPhone Screenshots - Left Side */}
         <div className="flex justify-center lg:justify-end">
@@ -155,11 +163,12 @@ export default function ProductShowcase() {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
-                index === currentIndex 
-                  ? 'bg-gold-400 shadow-lg shadow-gold-400/60 ring-2 ring-gold-400/40' 
-                  : 'bg-gold-400/50 hover:bg-gold-400/80 border border-gold-400/60'
-              }`}
+              className="w-6 h-6 rounded-full transition-all duration-300 hover:scale-125"
+              style={{
+                backgroundColor: index === currentIndex ? 'transparent' : 'transparent',
+                border: `2px solid ${index === currentIndex ? '#F1B23E' : 'rgba(241, 178, 62, 0.5)'}`,
+                boxShadow: 'none'
+              }}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -183,7 +192,7 @@ export default function ProductShowcase() {
                   <h2 className="font-cinzel font-bold text-3xl lg:text-4xl text-gold-400 leading-tight mb-2">
                     {currentItem.title}
                   </h2>
-                  <h3 className="text-xl lg:text-2xl text-gold-400 font-semibold opacity-90">
+                  <h3 className="text-xl lg:text-2xl font-semibold opacity-90" style={{ color: '#F1B23E' }}>
                     {currentItem.subtitle}
                   </h3>
                 </div>
@@ -213,11 +222,12 @@ export default function ProductShowcase() {
               <button
                 key={index}
                 onClick={() => goToSlide(index)}
-                className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 ${
-                  index === currentIndex 
-                    ? 'bg-gold-400 shadow-lg shadow-gold-400/60' 
-                    : 'bg-gold-400/50 hover:bg-gold-400/80'
-                }`}
+              className="w-4 h-4 rounded-full transition-all duration-300 hover:scale-110"
+                style={{
+                  backgroundColor: 'transparent',
+                  border: `2px solid ${index === currentIndex ? '#F1B23E' : 'rgba(241, 178, 62, 0.5)'}`,
+                  boxShadow: 'none'
+                }}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}

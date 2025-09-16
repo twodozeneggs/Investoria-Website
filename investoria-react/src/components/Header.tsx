@@ -11,12 +11,20 @@ export default function Header() {
           INVESTORIA
         </span>
       </div>
-      <a
-        href="#waitlist"
+      <button
+        onClick={() => {
+          const waitlistSection = document.getElementById('waitlist');
+          if (waitlistSection) {
+            waitlistSection.scrollIntoView({ 
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        }}
         className="hidden sm:inline-flex rounded-xl bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-300 hover:to-gold-400 text-green-1000 font-bold px-6 py-3 transition-all duration-200 transform hover:-translate-y-1 shadow-2xl hover:shadow-gold-400/25 ring-2 ring-gold-400/30"
       >
         Join the Waitlist
-      </a>
+      </button>
     </header>
   );
 }

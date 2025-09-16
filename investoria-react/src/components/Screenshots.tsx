@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
 export default function Screenshots() {
+  const { ref: sectionRef, isVisible } = useScrollAnimation(0.2);
+  
   const screenshots = [
     { 
       id: 1,
@@ -46,7 +49,13 @@ export default function Screenshots() {
   };
 
   return (
-    <section id="screens" className="max-w-6xl mx-auto px-4 py-20">
+    <section 
+      id="screens" 
+      ref={sectionRef}
+      className={`max-w-6xl mx-auto px-4 py-20 transition-all duration-1000 ${
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+      }`}
+    >
       {/* Section header */}
       <div className="text-center mb-12">
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
