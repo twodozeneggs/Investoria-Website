@@ -157,8 +157,8 @@ export default function ProductShowcase() {
               onClick={() => goToSlide(index)}
               className={`w-4 h-4 rounded-full transition-all duration-300 hover:scale-125 ${
                 index === currentIndex 
-                  ? 'bg-gold-400 shadow-lg shadow-gold-400/50 ring-2 ring-gold-400/30' 
-                  : 'bg-gold-400/40 hover:bg-gold-400/70 border border-gold-400/50'
+                  ? 'bg-gold-400 shadow-lg shadow-gold-400/60 ring-2 ring-gold-400/40' 
+                  : 'bg-gold-400/50 hover:bg-gold-400/80 border border-gold-400/60'
               }`}
               aria-label={`Go to slide ${index + 1}`}
             />
@@ -183,7 +183,7 @@ export default function ProductShowcase() {
                   <h2 className="font-cinzel font-bold text-3xl lg:text-4xl text-gold-400 leading-tight mb-2">
                     {currentItem.title}
                   </h2>
-                  <h3 className="text-xl lg:text-2xl text-investoria-text font-semibold opacity-90">
+                  <h3 className="text-xl lg:text-2xl text-gold-400 font-semibold opacity-90">
                     {currentItem.subtitle}
                   </h3>
                 </div>
@@ -215,8 +215,8 @@ export default function ProductShowcase() {
                 onClick={() => goToSlide(index)}
                 className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 ${
                   index === currentIndex 
-                    ? 'bg-gold-400 shadow-lg shadow-gold-400/50' 
-                    : 'bg-gold-400/30 hover:bg-gold-400/60'
+                    ? 'bg-gold-400 shadow-lg shadow-gold-400/60' 
+                    : 'bg-gold-400/50 hover:bg-gold-400/80'
                 }`}
                 aria-label={`Go to slide ${index + 1}`}
               />
