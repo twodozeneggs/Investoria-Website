@@ -246,7 +246,7 @@ export default function FinalCTA() {
         {/* Disclaimer */}
         <div className="text-center">
           <p className="text-sm text-investoria-muted/70 leading-relaxed max-w-2xl mx-auto">
-            Educational & entertainment; no financial advice. We respect your privacy and will never spam you.
+            Educational & entertainment; Not financial advice. We respect your privacy and will never spam you.
           </p>
         </div>
       </div>

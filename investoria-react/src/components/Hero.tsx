@@ -50,7 +50,7 @@ export default function Hero() {
           </div>
           
           <p className="mt-6 text-xs text-investoria-muted/70">
-            Educational & fun. not financial advice.
+            Educational & fun. Not financial advice.
           </p>
         </div>
 
