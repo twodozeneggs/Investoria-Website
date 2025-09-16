@@ -42,18 +42,31 @@ export default function ProductShowcase() {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
 
   useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setIsAnimating(true);
       setTimeout(() => {
         setCurrentIndex((prev) => (prev + 1) % showcaseItems.length);
         setIsAnimating(false);
       }, 300);
-    }, 4000);
+    }, 6000); // Increased from 4000ms to 6000ms (6 seconds)
 
     return () => clearInterval(interval);
-  }, [showcaseItems.length]);
+  }, [showcaseItems.length, isPaused]);
+
+  const goToSlide = (index: number) => {
+    if (index !== currentIndex && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(index);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
 
   const currentItem = showcaseItems[currentIndex];
 
@@ -137,7 +150,11 @@ export default function ProductShowcase() {
         </div>
 
         {/* Content - Right Side */}
-        <div className="relative">
+        <div 
+          className="relative"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
           {/* Background decoration */}
           <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
           <div className="absolute top-1/2 -left-8 w-24 h-24 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
@@ -172,6 +189,22 @@ export default function ProductShowcase() {
                 ))}
               </div>
             </div>
+          </div>
+          
+          {/* Navigation Dots */}
+          <div className="flex justify-center mt-8 gap-3">
+            {showcaseItems.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => goToSlide(index)}
+                className={`w-3 h-3 rounded-full transition-all duration-300 hover:scale-110 ${
+                  index === currentIndex 
+                    ? 'bg-gold-400 shadow-lg shadow-gold-400/50' 
+                    : 'bg-gold-400/30 hover:bg-gold-400/60'
+                }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
           </div>
         </div>
       </div>
