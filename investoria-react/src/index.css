@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap');
+
+:root {
+  --green-700: #1F5A34;
+  --green-800: #184E2A;
+  --green-900: #10381D;
+  --green-1000: #0B2A15;
+  --gold-300: #F6C767;
+  --gold-400: #F1B23E;
+  --gold-500: #D99A2A;
+  --gold-600: #C18417;
+  --gold-700: #9A6710;
+  --text: #EAE8E1;
+  --muted: #C9C6B8;
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: var(--text);
+  background: linear-gradient(180deg, var(--green-800), var(--green-900));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}

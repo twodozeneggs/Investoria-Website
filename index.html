@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Investoria — Coming Soon</title>
+    <meta name="description" content="Investoria — a premium, fun, and enchanting city‑building investment adventure. Join the waitlist.">
+    <meta name="theme-color" content="#184E2A">
+    <meta property="og:title" content="Investoria — Coming Soon">
+    <meta property="og:description" content="A premium, fun, enchanting city‑building investment adventure. Join the waitlist.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/og-image.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <main id="main">
+      <section class="hero">
+        <div class="hero__bg" aria-hidden="true"></div>
+        <div class="container hero__content">
+          <h1 class="wordmark" aria-label="Investoria">
+            <span>INVESTORIA</span>
+          </h1>
+          <p class="tagline">A city‑building investment adventure. Coming soon.</p>
+          <div class="cta-row">
+            <button id="openWaitlist" class="btn btn-primary">Join the waitlist</button>
+            <a class="btn btn-ghost" href="#about">Learn more</a>
+          </div>
+        </div>
+
+        <div class="skyline" aria-hidden="true">
+          <svg class="skyline__svg" viewBox="0 0 1440 220" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="cityGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="var(--green-800)"/>
+                <stop offset="100%" stop-color="var(--green-900)"/>
+              </linearGradient>
+            </defs>
+            <rect width="1440" height="220" fill="url(#cityGradient)"></rect>
+            <g fill="var(--green-1000)">
+              <rect x="40" y="60" width="80" height="160"/>
+              <rect x="140" y="90" width="60" height="130"/>
+              <rect x="220" y="40" width="90" height="180"/>
+              <rect x="330" y="100" width="70" height="120"/>
+              <rect x="420" y="75" width="85" height="145"/>
+              <rect x="520" y="120" width="65" height="100"/>
+              <rect x="600" y="80" width="95" height="140"/>
+              <rect x="710" y="110" width="70" height="110"/>
+              <rect x="800" y="55" width="85" height="165"/>
+              <rect x="900" y="95" width="60" height="125"/>
+              <rect x="980" y="70" width="80" height="150"/>
+              <rect x="1080" y="105" width="70" height="115"/>
+              <rect x="1170" y="50" width="95" height="170"/>
+              <rect x="1280" y="90" width="70" height="130"/>
+            </g>
+          </svg>
+          <div class="crane">
+            <div class="crane__arm"></div>
+            <div class="crane__hook"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about container">
+        <h2 class="section-title">Building a city worth investing in</h2>
+        <p class="lead">Investoria blends the joy of city‑builders with the real‑world intuition of investing. We’re crafting something premium, fun, and enchanting — with quality at every turn.</p>
+      </section>
+    </main>
+
+    <footer class="footer container">
+      <div class="footer__brand">© <span class="sr-only">Investoria</span>INVESTORIA</div>
+      <nav class="footer__nav" aria-label="Social">
+        <a href="#" aria-disabled="true" class="link">Twitter</a>
+        <a href="#" aria-disabled="true" class="link">Discord</a>
+        <a href="#" aria-disabled="true" class="link">YouTube</a>
+      </nav>
+    </footer>
+
+    <dialog id="waitlistModal" class="modal">
+      <form id="waitlistForm" method="post" class="modal__card" novalidate>
+        <button type="button" class="modal__close" aria-label="Close" data-close>×</button>
+        <h3 class="modal__title">Join the waitlist</h3>
+        <p class="modal__subtitle">Be first to play, get updates, and help shape the city.</p>
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@domain.com" required inputmode="email" autocomplete="email" />
+          <small class="hint">We’ll never share your email.</small>
+        </div>
+        <button class="btn btn-primary" type="submit">Notify me</button>
+        <p class="provider-note">To activate this form, provide your waitlist provider endpoint (Formspree, Tally, Mailchimp, etc.).</p>
+        <output id="formMessage" role="status" class="form-message" aria-live="polite"></output>
+      </form>
+    </dialog>
+
+    <script src="./scripts/main.js" defer></script>
+  </body>
+  </html>
+
+
