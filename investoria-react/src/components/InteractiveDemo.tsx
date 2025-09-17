@@ -67,6 +67,22 @@ export default function InteractiveDemo() {
   const [isMobile, setIsMobile] = useState(false);
   const [showStockInfo, setShowStockInfo] = useState(false);
 
+  // Global scroll monitor for debugging
+  useEffect(() => {
+    let lastScrollY = window.scrollY;
+    
+    const scrollMonitor = () => {
+      const newScrollY = window.scrollY;
+      if (newScrollY !== lastScrollY) {
+        console.log('📍 SCROLL CHANGE:', lastScrollY, '→', newScrollY, 'currentStep:', currentStep);
+        lastScrollY = newScrollY;
+      }
+    };
+    
+    window.addEventListener('scroll', scrollMonitor);
+    return () => window.removeEventListener('scroll', scrollMonitor);
+  }, [currentStep]);
+
   // Detect mobile device
   useEffect(() => {
     const checkMobile = () => {
@@ -115,6 +131,18 @@ export default function InteractiveDemo() {
         // Check if it actually worked
         setTimeout(() => {
           console.log('🎉 RESULT: final scrollY =', window.scrollY, 'should be', currentScrollY);
+          
+          // Monitor for late scrolling
+          const monitorLateScroll = () => {
+            const lateScrollY = window.scrollY;
+            if (lateScrollY !== currentScrollY) {
+              console.log('⚠️ LATE SCROLL DETECTED:', lateScrollY, 'vs expected', currentScrollY);
+            }
+          };
+          
+          setTimeout(monitorLateScroll, 200);
+          setTimeout(monitorLateScroll, 500);
+          setTimeout(monitorLateScroll, 1000);
         }, 100);
       }, 500);
       
