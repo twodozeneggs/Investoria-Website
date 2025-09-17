@@ -188,16 +188,16 @@ export default function InteractiveDemo() {
               
               // Position header at 25% from top of viewport (instead of 0%)
               const targetFromTop = viewportHeight * 0.25;
-              const newScrollY = currentScrollY + currentHeaderRect.top - targetFromTop;
-              // Allow negative scroll values - browser will handle the constraint
-              const finalScrollY = newScrollY;
+              // If header is at -174px and we want it at +190px, we need to scroll up by (174 + 190)
+              const scrollAdjustment = Math.abs(currentHeaderRect.top) + targetFromTop;
+              const finalScrollY = Math.max(0, currentScrollY - scrollAdjustment);
               
               console.log('🎯 CUSTOM POSITIONING:', {
                 headerTop: currentHeaderRect.top,
                 viewportHeight: viewportHeight,
                 targetFromTop: targetFromTop,
                 currentScrollY: currentScrollY,
-                newScrollY: newScrollY,
+                scrollAdjustment: scrollAdjustment,
                 finalScrollY: finalScrollY
               });
               
