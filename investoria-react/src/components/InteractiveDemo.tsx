@@ -180,20 +180,19 @@ export default function InteractiveDemo() {
             });
             
             if (currentHeaderRect.top < 0) {
-              console.log('🚀 USING SCROLL INTO VIEW - should be more reliable');
+              console.log('🚀 USING CUSTOM POSITIONING - 25% from top');
               
               // Calculate a custom scroll position that leaves more space below
-              const headerRect = header.getBoundingClientRect();
               const viewportHeight = window.innerHeight;
               const currentScrollY = window.scrollY;
               
               // Position header at 25% from top of viewport (instead of 0%)
               const targetFromTop = viewportHeight * 0.25;
-              const newScrollY = currentScrollY + headerRect.top - targetFromTop;
+              const newScrollY = currentScrollY + currentHeaderRect.top - targetFromTop;
               const finalScrollY = Math.max(0, newScrollY);
               
               console.log('🎯 CUSTOM POSITIONING:', {
-                headerTop: headerRect.top,
+                headerTop: currentHeaderRect.top,
                 viewportHeight: viewportHeight,
                 targetFromTop: targetFromTop,
                 currentScrollY: currentScrollY,
