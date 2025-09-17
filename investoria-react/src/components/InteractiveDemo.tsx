@@ -646,11 +646,6 @@ export default function InteractiveDemo() {
                         className="w-full h-8 object-contain mb-1 pointer-events-none" 
                       />
                       <div className="text-xs text-center text-gold-400 font-medium pointer-events-none">{building.name}</div>
-                      {selectedItem?.item.id === building.id && selectedItem?.type === 'building' && (
-                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                          ✓
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
@@ -708,11 +703,6 @@ export default function InteractiveDemo() {
                         alt={item.name} 
                         className="w-full h-8 object-contain pointer-events-none" 
                       />
-                      {selectedItem?.item.id === item.id && selectedItem?.type === 'terrain' && (
-                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                          ✓
-                        </div>
-                      )}
                     </div>
                   ))}
                   {currentStep === 'pet' && pets.map((pet) => (
@@ -732,11 +722,6 @@ export default function InteractiveDemo() {
                         alt={pet.name} 
                         className="w-full h-8 object-contain pointer-events-none" 
                       />
-                      {selectedItem?.item.id === pet.id && selectedItem?.type === 'pet' && (
-                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
-                          ✓
-                        </div>
-                      )}
                     </div>
                   ))}
                 </div>
