@@ -73,7 +73,6 @@ export default function InteractiveDemo() {
   const [placedPet, setPlacedPet] = useState(false);
   const [terrainCount, setTerrainCount] = useState(0);
   const [cityLifeCount, setCityLifeCount] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -121,12 +120,9 @@ export default function InteractiveDemo() {
       };
       console.log('📱 VIEWPORT:', viewport);
       
-      setIsTransitioning(true);
-      
       const timer = setTimeout(() => {
         console.log('✅ COMPLETION DONE: setting step to complete');
         setCurrentStep('complete');
-        setIsTransitioning(false);
         
         // HYBRID APPROACH: Layout preservation + minimal padding for perfect positioning
         setTimeout(() => {
@@ -158,7 +154,7 @@ export default function InteractiveDemo() {
             }
           }
         }, 100);
-      }, 500);
+      }, 350);
       
       return () => clearTimeout(timer);
     }
@@ -551,10 +547,8 @@ export default function InteractiveDemo() {
   const switchToStep = (step: GameStep) => {
     if (step === 'terrain' || step === 'pet') {
       if (step !== currentStep) {
-        setIsTransitioning(true);
         setTimeout(() => {
           setCurrentStep(step);
-          setTimeout(() => setIsTransitioning(false), 50);
         }, 150);
       }
     }
@@ -879,9 +873,7 @@ export default function InteractiveDemo() {
                   </div>
                 </div>
                 
-                <div className={`grid grid-cols-3 gap-3 transition-opacity duration-300 ${
-                  isTransitioning ? 'opacity-0' : 'opacity-100'
-                }`}>
+                <div className="grid grid-cols-3 gap-3">
                   {currentStep === 'terrain' 
                     ? terrainItems.map((item, index) => (
                         <div
@@ -889,9 +881,7 @@ export default function InteractiveDemo() {
                           onClick={() => handleItemSelect(item, 'terrain')}
                           draggable={!isMobile}
                           onDragStart={(e) => handleDragStart(e, item, 'terrain')}
-                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
-                            !isTransitioning ? 'animate-fade-in' : ''
-                          } ${
+                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden animate-fade-in ${
                             selectedItem?.item.id === item.id && selectedItem?.type === 'terrain'
                               ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
                               : 'hover:ring-gold-400/30'
@@ -915,9 +905,7 @@ export default function InteractiveDemo() {
                           onClick={() => handleItemSelect(item, 'pet')}
                           draggable={!isMobile}
                           onDragStart={(e) => handleDragStart(e, item, 'pet')}
-                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
-                            !isTransitioning ? 'animate-fade-in' : ''
-                          } ${
+                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden animate-fade-in ${
                             selectedItem?.item.id === item.id && selectedItem?.type === 'pet'
                               ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
                               : 'hover:ring-gold-400/30'
@@ -942,7 +930,7 @@ export default function InteractiveDemo() {
 
             
             {currentStep === 'complete' && (
-              <div className="animate-fade-in h-full flex flex-col relative">
+              <div className="h-full flex flex-col relative">
                 <div 
                   className="overflow-y-scroll flex-1 pr-2 scroll-smooth hide-scrollbar"
                   style={{ maxHeight: '450px' }}
@@ -1140,136 +1128,117 @@ export default function InteractiveDemo() {
         {/* Mobile: Interactive Grid */}
         <div className={`lg:hidden flex justify-center ${currentStep === 'complete' && isMobile ? 'mt-8' : ''}`}>
           <div className="w-full max-w-sm">
-            <div 
-              className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20"
-              style={{ perspective: '1000px' }}
-            >
-              {/* Grid Container with Flip Animation */}
+            <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20">
+              {/* City Grid - slides up when showing stock info */}
               <div 
-                className="w-full h-full transition-transform duration-700"
-                style={{ 
-                  transformStyle: 'preserve-3d',
-                  transform: showStockInfo ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                  WebkitTransform: showStockInfo ? 'rotateY(180deg)' : 'rotateY(0deg)'
-                }}
+                className={`absolute inset-0 w-full h-full transition-transform duration-500 ease-in-out ${
+                  showStockInfo ? '-translate-y-full' : 'translate-y-0'
+                }`}
               >
-                {/* Front Side - City Grid */}
                 <div 
-                  className="absolute inset-0 w-full h-full"
-                  style={{ 
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden'
-                  }}
+                  className="grid grid-cols-3 gap-0 w-full h-full"
+                  style={{ pointerEvents: currentStep === 'complete' ? 'none' : 'auto' }}
                 >
-                  <div 
-                    className="grid grid-cols-3 gap-0 w-full h-full"
-                    style={{ pointerEvents: currentStep === 'complete' ? 'none' : 'auto' }}
-                  >
-                    {grid.map((tile, index) => renderGridTile(tile, index))}
-                  </div>
+                  {grid.map((tile, index) => renderGridTile(tile, index))}
                 </div>
+              </div>
 
-                {/* Back Side - Stock Information */}
-                <div 
-                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-700 to-green-900 p-4 flex flex-col justify-center"
-                  style={{ 
-                    backfaceVisibility: 'hidden',
-                    WebkitBackfaceVisibility: 'hidden',
-                    transform: 'rotateY(180deg)',
-                    WebkitTransform: 'rotateY(180deg)'
-                  }}
-                >
-                  {(() => {
-                    // Find the building in the grid
-                    const buildingTile = grid.find(tile => tile.type === 'building');
-                    if (!buildingTile || !buildingTile.data) return null;
-                    
-                    const building = buildingTile.data as StockBuilding;
-                    return (
-                      <div className="text-white h-full flex flex-col justify-start py-2 px-2 overflow-y-auto space-y-2">
-                        {/* Header Section */}
-                        <div className="text-center mb-2">
-                          <img 
-                            src={building.emoji} 
-                            alt={building.name} 
-                            className="w-12 h-12 mx-auto mb-1 rounded-lg bg-green-600/30 p-1" 
-                          />
-                          <div className="text-xl font-bold text-gold-400">{building.symbol}</div>
-                          <div className="text-sm text-green-300">{building.name} Sector</div>
-                        </div>
+              {/* Stock Information - slides up from bottom */}
+              <div 
+                className={`absolute inset-0 w-full h-full bg-gradient-to-br from-green-700 to-green-900 transition-transform duration-500 ease-in-out ${
+                  showStockInfo ? 'translate-y-0' : 'translate-y-full'
+                }`}
+              >
+                {(() => {
+                  // Find the building in the grid
+                  const buildingTile = grid.find(tile => tile.type === 'building');
+                  if (!buildingTile || !buildingTile.data) return null;
+                  
+                  const building = buildingTile.data as StockBuilding;
+                  return (
+                    <div className="text-white h-full flex flex-col justify-start py-4 px-4 overflow-y-auto space-y-3">
+                      {/* Header Section */}
+                      <div className="text-center mb-3">
+                        <img 
+                          src={building.emoji} 
+                          alt={building.name} 
+                          className="w-16 h-16 mx-auto mb-2 rounded-lg bg-green-600/30 p-2" 
+                        />
+                        <div className="text-2xl font-bold text-gold-400">{building.symbol}</div>
+                        <div className="text-base text-green-300">{building.name} Sector</div>
+                      </div>
 
-                        {/* Performance Metrics Glass Pane */}
-                        <div className="bg-white/10 backdrop-blur-md rounded-xl p-3 border border-white/20 shadow-lg">
-                          <div className="space-y-1 text-xs">
-                            <div className="flex justify-between">
-                              <span className="text-green-200">Stock Price:</span>
-                              <span className="text-white font-bold">{building.price}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-green-200">Change:</span>
-                              <span className="text-green-400 font-bold">{building.change} ({building.changePercent})</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-green-200">Investment:</span>
-                              <span className="text-white font-bold">{building.investment}</span>
-                            </div>
-                            <div className="flex justify-between">
-                              <span className="text-green-200">Current Value:</span>
-                              <span className="text-green-400 font-bold">{building.currentValue}</span>
-                            </div>
+                      {/* Performance Metrics Glass Pane */}
+                      <div className="bg-white/10 backdrop-blur-md rounded-xl p-4 border border-white/20 shadow-lg">
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Stock Price:</span>
+                            <span className="text-white font-bold">{building.price}</span>
                           </div>
-                        </div>
-
-                        {/* Sector Overview Glass Pane */}
-                        <div className="bg-blue-500/10 backdrop-blur-md rounded-xl p-3 border border-blue-400/20 shadow-lg">
-                          <div className="text-xs font-semibold text-blue-300 mb-2">About {building.name}</div>
-                          <p className="text-xs text-green-100 leading-relaxed mb-2">{building.sectorInfo.description}</p>
-                          <div className="grid grid-cols-2 gap-2 text-xs">
-                            <div>
-                              <span className="text-blue-200">Market Cap</span>
-                              <div className="text-white font-bold">{building.sectorInfo.marketCap}</div>
-                            </div>
-                            <div>
-                              <span className="text-blue-200">YTD Return</span>
-                              <div className="text-green-400 font-bold">{building.sectorInfo.ytdReturn}</div>
-                            </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Change:</span>
+                            <span className="text-green-400 font-bold">{building.change} ({building.changePercent})</span>
                           </div>
-                        </div>
-
-                        {/* Top Holdings Glass Pane */}
-                        <div className="bg-purple-500/10 backdrop-blur-md rounded-xl p-3 border border-purple-400/20 shadow-lg">
-                          <div className="text-xs font-semibold text-purple-300 mb-2">Top Holdings</div>
-                          <div className="space-y-1">
-                            {building.sectorInfo.topStocks.slice(0, 3).map((stock, index) => (
-                              <div key={index} className="flex justify-between text-xs">
-                                <span className="text-green-200 truncate flex-1">{stock.name}</span>
-                                <span className="text-white font-medium ml-2">{stock.price}</span>
-                                <span className="text-green-400 text-xs ml-1">{stock.change}</span>
-                              </div>
-                            ))}
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Investment:</span>
+                            <span className="text-white font-bold">{building.investment}</span>
                           </div>
-                        </div>
-
-                        {/* Key Insights Glass Pane */}
-                        <div className="bg-yellow-500/10 backdrop-blur-md rounded-xl p-3 border border-yellow-400/20 shadow-lg">
-                          <div className="text-xs font-semibold text-yellow-300 mb-2">Key Insights</div>
-                          <div className="space-y-1">
-                            {building.sectorInfo.insights.slice(0, 2).map((insight, index) => (
-                              <div key={index} className="text-xs text-green-100 leading-relaxed">
-                                • <span className="font-medium text-yellow-200">{insight.title}:</span> {insight.content}
-                              </div>
-                            ))}
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Current Value:</span>
+                            <span className="text-green-400 font-bold">{building.currentValue}</span>
                           </div>
-                        </div>
-
-                        {/* Footer */}
-                        <div className="text-center pt-2">
-                          <div className="text-xs text-green-300">Tap to flip back to city</div>
                         </div>
                       </div>
-                    );
-                  })()}
-                </div>
+
+                      {/* Sector Overview Glass Pane */}
+                      <div className="bg-blue-500/10 backdrop-blur-md rounded-xl p-4 border border-blue-400/20 shadow-lg">
+                        <div className="text-sm font-semibold text-blue-300 mb-2">About {building.name}</div>
+                        <p className="text-sm text-green-100 leading-relaxed mb-3">{building.sectorInfo.description}</p>
+                        <div className="grid grid-cols-2 gap-3 text-sm">
+                          <div>
+                            <span className="text-blue-200">Market Cap</span>
+                            <div className="text-white font-bold">{building.sectorInfo.marketCap}</div>
+                          </div>
+                          <div>
+                            <span className="text-blue-200">YTD Return</span>
+                            <div className="text-green-400 font-bold">{building.sectorInfo.ytdReturn}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Top Holdings Glass Pane */}
+                      <div className="bg-purple-500/10 backdrop-blur-md rounded-xl p-4 border border-purple-400/20 shadow-lg">
+                        <div className="text-sm font-semibold text-purple-300 mb-3">Top Holdings</div>
+                        <div className="space-y-2">
+                          {building.sectorInfo.topStocks.slice(0, 3).map((stock, index) => (
+                            <div key={index} className="flex justify-between text-sm">
+                              <span className="text-green-200 truncate flex-1">{stock.name}</span>
+                              <span className="text-white font-medium ml-2">{stock.price}</span>
+                              <span className="text-green-400 text-sm ml-1">{stock.change}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Key Insights Glass Pane */}
+                      <div className="bg-yellow-500/10 backdrop-blur-md rounded-xl p-4 border border-yellow-400/20 shadow-lg">
+                        <div className="text-sm font-semibold text-yellow-300 mb-3">Key Insights</div>
+                        <div className="space-y-2">
+                          {building.sectorInfo.insights.slice(0, 2).map((insight, index) => (
+                            <div key={index} className="text-sm text-green-100 leading-relaxed">
+                              • <span className="font-medium text-yellow-200">{insight.title}:</span> {insight.content}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Footer */}
+                      <div className="text-center pt-3">
+                        <div className="text-sm text-green-300">Tap "Back to City" to return</div>
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -1278,11 +1247,11 @@ export default function InteractiveDemo() {
       
       {/* Action Buttons */}
       <div className="flex justify-center items-center gap-4 mt-8">
-        {/* View Stock Info Button - Only visible when complete */}
+        {/* View Stock Info Button - Only visible when complete and on mobile */}
         {currentStep === 'complete' && (
           <button
             onClick={handleGridFlip}
-            className="group relative px-6 py-3 bg-white/5 backdrop-blur-md hover:bg-white/10 text-gold-400 rounded-lg transition-all duration-300 font-semibold border border-gold-400/30 hover:border-gold-400/50 hover:shadow-xl hover:shadow-gold-400/10 hover:-translate-y-0.5 animate-fade-in overflow-hidden"
+            className="lg:hidden group relative px-6 py-3 bg-white/5 backdrop-blur-md hover:bg-white/10 text-gold-400 rounded-lg transition-all duration-300 font-semibold border border-gold-400/30 hover:border-gold-400/50 hover:shadow-xl hover:shadow-gold-400/10 hover:-translate-y-0.5 animate-fade-in overflow-hidden"
           >
             {/* Animated gradient overlay */}
             <div className="absolute inset-0 bg-gradient-to-r from-gold-400/10 via-gold-500/5 to-gold-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
