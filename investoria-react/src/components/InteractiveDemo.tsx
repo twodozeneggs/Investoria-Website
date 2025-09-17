@@ -168,24 +168,24 @@ export default function InteractiveDemo() {
             });
             
             if (currentHeaderRect.top < 0) {
-              // Calculate where we want the header to be (20px from top)
-              const targetPosition = 20;
-              const currentScrollY = window.scrollY;
-              // We need to scroll up by the amount the header is above viewport, minus our target position
-              const newScrollY = currentScrollY + currentHeaderRect.top - targetPosition;
-              const finalScrollY = Math.max(0, newScrollY); // Don't go below 0
+              console.log('🚀 USING SCROLL INTO VIEW - should be more reliable');
               
-              console.log('🔧 HEADER CORRECTION:', {
-                headerTop: currentHeaderRect.top,
-                currentScrollY: currentScrollY,
-                newScrollY: newScrollY,
-                finalScrollY: finalScrollY
+              // Try scrollIntoView instead of manual calculation
+              header.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start',
+                inline: 'nearest' 
               });
               
-              window.scrollTo({
-                top: finalScrollY,
-                behavior: 'smooth'
-              });
+              // Log after scroll attempt
+              setTimeout(() => {
+                const afterScrollRect = header.getBoundingClientRect();
+                console.log('📍 AFTER SCROLL INTO VIEW:', {
+                  top: afterScrollRect.top,
+                  scrollY: window.scrollY,
+                  success: afterScrollRect.top >= 0 && afterScrollRect.top < 100
+                });
+              }, 1000);
             }
           } else {
             console.log('❌ HEADER NOT FOUND - ID: city-builder-header');
