@@ -170,12 +170,22 @@ export default function InteractiveDemo() {
             if (currentHeaderRect.top < 0) {
               console.log('🚀 USING SCROLL INTO VIEW - should be more reliable');
               
-              // Try scrollIntoView instead of manual calculation
+              // Try scrollIntoView with offset to account for the ~28px gap
               header.scrollIntoView({ 
                 behavior: 'smooth', 
                 block: 'start',
                 inline: 'nearest' 
               });
+              
+              // Additional adjustment after scrollIntoView
+              setTimeout(() => {
+                const adjustedScrollY = window.scrollY - 30; // Add 30px buffer
+                window.scrollTo({
+                  top: Math.max(0, adjustedScrollY),
+                  behavior: 'smooth'
+                });
+                console.log('🔧 FINE-TUNE ADJUSTMENT: scrolled up 30px more');
+              }, 100);
               
               // Log after scroll attempt
               setTimeout(() => {
