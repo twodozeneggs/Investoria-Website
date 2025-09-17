@@ -159,13 +159,15 @@ export default function ProductShowcase() {
       <div className="relative grid lg:grid-cols-2 gap-12 items-center">
         {/* iPhone Screenshots - Left Side */}
         <div className="flex justify-center lg:justify-end">
-          <img 
-            src={currentItem.screenshot}
-            alt={currentItem.title}
-            className={`w-[480px] lg:w-[600px] h-auto transition-opacity duration-300 ${
-              isAnimating ? 'opacity-0' : 'opacity-100'
-            }`}
-          />
+          <div className="w-[480px] lg:w-[600px] h-[400px] lg:h-[500px] flex items-center justify-center">
+            <img 
+              src={currentItem.screenshot}
+              alt={currentItem.title}
+              className={`max-w-full max-h-full w-auto h-auto object-contain transition-opacity duration-300 ${
+                isAnimating ? 'opacity-0' : 'opacity-100'
+              }`}
+            />
+          </div>
         </div>
 
         {/* Center Navigation Dots - Between Image and Text */}

@@ -86,29 +86,35 @@ export default function Screenshots() {
         <div className="relative flex items-center justify-center min-h-[600px]">
           {/* Left background phone */}
           <div className="absolute left-8 lg:left-16 top-12 transform -rotate-12 scale-75 opacity-60 z-0">
-            <img 
-              src={screenshots[(currentIndex + 2) % total].src}
-              alt={screenshots[(currentIndex + 2) % total].title}
-              className="w-80 h-auto shadow-2xl rounded-3xl"
-            />
+            <div className="w-80 h-64 flex items-center justify-center">
+              <img 
+                src={screenshots[(currentIndex + 2) % total].src}
+                alt={screenshots[(currentIndex + 2) % total].title}
+                className="max-w-full max-h-full w-auto h-auto object-contain shadow-2xl rounded-3xl"
+              />
+            </div>
           </div>
           
           {/* Right background phone */}
           <div className="absolute right-8 lg:right-16 top-12 transform rotate-12 scale-75 opacity-60 z-0">
-            <img 
-              src={screenshots[(currentIndex + 1) % total].src}
-              alt={screenshots[(currentIndex + 1) % total].title}
-              className="w-80 h-auto shadow-2xl rounded-3xl"
-            />
+            <div className="w-80 h-64 flex items-center justify-center">
+              <img 
+                src={screenshots[(currentIndex + 1) % total].src}
+                alt={screenshots[(currentIndex + 1) % total].title}
+                className="max-w-full max-h-full w-auto h-auto object-contain shadow-2xl rounded-3xl"
+              />
+            </div>
           </div>
           
           {/* Main center phone */}
           <div className="relative z-10">
-            <img 
-              src={screenshots[currentIndex].src}
-              alt={screenshots[currentIndex].title}
-              className="w-80 lg:w-96 h-auto shadow-2xl rounded-3xl"
-            />
+            <div className="w-80 lg:w-96 h-64 lg:h-80 flex items-center justify-center">
+              <img 
+                src={screenshots[currentIndex].src}
+                alt={screenshots[currentIndex].title}
+                className="max-w-full max-h-full w-auto h-auto object-contain shadow-2xl rounded-3xl"
+              />
+            </div>
           </div>
         </div>
         
