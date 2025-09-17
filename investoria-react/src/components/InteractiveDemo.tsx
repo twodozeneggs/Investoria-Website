@@ -65,7 +65,6 @@ export default function InteractiveDemo() {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
   const [showStockInfo, setShowStockInfo] = useState(false);
-  const [isFlipping, setIsFlipping] = useState(false);
 
   // Auto-complete when grid is completely filled
   useEffect(() => {
@@ -329,30 +328,11 @@ export default function InteractiveDemo() {
     setCityLifeCount(0);
     setSelectedItem(null);
     setShowStockInfo(false);
-    setIsFlipping(false);
   };
 
   const handleGridFlip = () => {
-    console.log('handleGridFlip called, currentStep:', currentStep);
-    console.log('Current state - showStockInfo:', showStockInfo, 'isFlipping:', isFlipping);
-    
-    if (currentStep !== 'complete') {
-      console.log('Returning early - currentStep is not complete');
-      return;
-    }
-    
-    console.log('Starting flip animation...');
-    setIsFlipping(true);
-    
-    setTimeout(() => {
-      console.log('Setting showStockInfo to:', !showStockInfo);
-      setShowStockInfo(!showStockInfo);
-      
-      setTimeout(() => {
-        console.log('Ending flip animation');
-        setIsFlipping(false);
-      }, 300);
-    }, 300);
+    if (currentStep !== 'complete') return;
+    setShowStockInfo(!showStockInfo);
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -1038,36 +1018,25 @@ export default function InteractiveDemo() {
               className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20 ${
                 currentStep === 'complete' ? 'cursor-pointer' : ''
               }`}
-              onClick={(e) => {
-                console.log('Grid container clicked!', e.target);
-                console.log('currentStep:', currentStep);
-                console.log('Event details:', e.type, e.bubbles, e.cancelable);
-                if (currentStep === 'complete') {
-                  console.log('Calling handleGridFlip...');
-                  handleGridFlip();
-                } else {
-                  console.log('Not calling handleGridFlip - currentStep is not complete');
-                }
-              }}
+              onClick={currentStep === 'complete' ? handleGridFlip : undefined}
               style={{ perspective: '1000px' }}
             >
               {/* Grid Container with Flip Animation */}
               <div 
-                className={`w-full h-full transition-transform duration-700 transform-gpu ${
-                  (() => {
-                    const rotateClass = isFlipping 
-                      ? (showStockInfo ? 'rotateY-180' : 'rotateY-0') 
-                      : (showStockInfo ? 'rotateY-180' : 'rotateY-0');
-                    console.log('Applied rotation class:', rotateClass, 'showStockInfo:', showStockInfo, 'isFlipping:', isFlipping);
-                    return rotateClass;
-                  })()
-                }`}
-                style={{ transformStyle: 'preserve-3d' }}
+                className="w-full h-full transition-transform duration-700"
+                style={{ 
+                  transformStyle: 'preserve-3d',
+                  transform: showStockInfo ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  WebkitTransform: showStockInfo ? 'rotateY(180deg)' : 'rotateY(0deg)'
+                }}
               >
                 {/* Front Side - City Grid */}
                 <div 
-                  className="absolute inset-0 w-full h-full backface-hidden"
-                  style={{ backfaceVisibility: 'hidden' }}
+                  className="absolute inset-0 w-full h-full"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden'
+                  }}
                 >
                   <div 
                     className="grid grid-cols-3 gap-0 w-full h-full"
@@ -1087,8 +1056,13 @@ export default function InteractiveDemo() {
 
                 {/* Back Side - Stock Information */}
                 <div 
-                  className="absolute inset-0 w-full h-full backface-hidden rotateY-180 bg-gradient-to-br from-green-700 to-green-900 p-4 flex flex-col justify-center"
-                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                  className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-700 to-green-900 p-4 flex flex-col justify-center"
+                  style={{ 
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden',
+                    transform: 'rotateY(180deg)',
+                    WebkitTransform: 'rotateY(180deg)'
+                  }}
                 >
                   {(() => {
                     // Find the building in the grid
