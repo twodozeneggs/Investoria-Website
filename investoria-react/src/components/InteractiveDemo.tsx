@@ -628,7 +628,7 @@ export default function InteractiveDemo() {
                       onClick={() => handleItemSelect(building, 'building')}
                       draggable={!isMobile}
                       onDragStart={(e) => handleDragStart(e, building, 'building')}
-                      className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none ${
+                      className={`bg-green-600/30 rounded-xl p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none ${
                         selectedItem?.item.id === building.id && selectedItem?.type === 'building'
                           ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
                           : 'border-gold-400/20 hover:border-gold-400/50'
@@ -705,7 +705,7 @@ export default function InteractiveDemo() {
                       onClick={() => handleItemSelect(pet, 'pet')}
                       draggable={!isMobile}
                       onDragStart={(e) => handleDragStart(e, pet, 'pet')}
-                      className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 text-center select-none relative ${
+                      className={`bg-green-600/30 rounded-xl p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 text-center select-none relative ${
                         selectedItem?.item.id === pet.id && selectedItem?.type === 'pet'
                           ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
                           : 'border-gold-400/20 hover:border-gold-400/50'
