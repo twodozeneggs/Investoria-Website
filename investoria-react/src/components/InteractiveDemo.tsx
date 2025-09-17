@@ -156,6 +156,19 @@ export default function InteractiveDemo() {
             scrollX: window.scrollX,
             innerHeight: window.innerHeight
           });
+          
+          // Fix: If header is above viewport, scroll to make it visible
+          if (header) {
+            const currentHeaderRect = header.getBoundingClientRect();
+            if (currentHeaderRect.top < 0) {
+              const scrollAdjustment = Math.abs(currentHeaderRect.top) + 20; // Add 20px padding
+              console.log('🔧 SCROLLING UP BY:', scrollAdjustment);
+              window.scrollTo({
+                top: Math.max(0, window.scrollY - scrollAdjustment),
+                behavior: 'smooth'
+              });
+            }
+          }
         }, 100);
       }, 500);
       
