@@ -506,10 +506,10 @@ export default function InteractiveDemo() {
       {/* Mobile-Optimized Layout */}
       <div className="space-y-6">
         {/* Mobile: Compact Instructions at Top */}
-        <div className="lg:hidden">
-          <div className="bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-2xl p-4 shadow-lg">
+        {currentStep !== 'complete' && (
+          <div className="lg:hidden">
+            <div className="bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-2xl p-4 shadow-lg">
             {/* Mobile Progress Indicator */}
-            {currentStep !== 'complete' && (
               <div className="flex justify-center mb-4">
                 <div className="flex items-center">
                   {[1, 2, 3].map((step) => (
@@ -543,7 +543,6 @@ export default function InteractiveDemo() {
                   ))}
                 </div>
               </div>
-            )}
 
             {/* Mobile: Compact Step Content */}
             {currentStep === 'building' && (
@@ -619,7 +618,7 @@ export default function InteractiveDemo() {
                   </button>
                 </div>
 
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   {currentStep === 'terrain' && terrainItems.map((item) => (
                     <div
                       key={item.id}
@@ -672,8 +671,9 @@ export default function InteractiveDemo() {
               </div>
             )}
 
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Desktop: Side-by-Side Layout */}
         <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
