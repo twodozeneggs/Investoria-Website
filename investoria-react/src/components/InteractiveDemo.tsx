@@ -334,13 +334,24 @@ export default function InteractiveDemo() {
 
   const handleGridFlip = () => {
     console.log('handleGridFlip called, currentStep:', currentStep);
-    if (currentStep !== 'complete') return;
+    console.log('Current state - showStockInfo:', showStockInfo, 'isFlipping:', isFlipping);
     
-    console.log('Flipping grid, showStockInfo:', showStockInfo);
+    if (currentStep !== 'complete') {
+      console.log('Returning early - currentStep is not complete');
+      return;
+    }
+    
+    console.log('Starting flip animation...');
     setIsFlipping(true);
+    
     setTimeout(() => {
+      console.log('Setting showStockInfo to:', !showStockInfo);
       setShowStockInfo(!showStockInfo);
-      setTimeout(() => setIsFlipping(false), 300);
+      
+      setTimeout(() => {
+        console.log('Ending flip animation');
+        setIsFlipping(false);
+      }, 300);
     }, 300);
   };
 
@@ -1027,15 +1038,29 @@ export default function InteractiveDemo() {
               className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20 ${
                 currentStep === 'complete' ? 'cursor-pointer' : ''
               }`}
-              onClick={currentStep === 'complete' ? handleGridFlip : undefined}
+              onClick={(e) => {
+                console.log('Grid container clicked!', e.target);
+                console.log('currentStep:', currentStep);
+                console.log('Event details:', e.type, e.bubbles, e.cancelable);
+                if (currentStep === 'complete') {
+                  console.log('Calling handleGridFlip...');
+                  handleGridFlip();
+                } else {
+                  console.log('Not calling handleGridFlip - currentStep is not complete');
+                }
+              }}
               style={{ perspective: '1000px' }}
             >
               {/* Grid Container with Flip Animation */}
               <div 
                 className={`w-full h-full transition-transform duration-700 transform-gpu ${
-                  isFlipping 
-                    ? (showStockInfo ? 'rotateY-180' : 'rotateY-0') 
-                    : (showStockInfo ? 'rotateY-180' : 'rotateY-0')
+                  (() => {
+                    const rotateClass = isFlipping 
+                      ? (showStockInfo ? 'rotateY-180' : 'rotateY-0') 
+                      : (showStockInfo ? 'rotateY-180' : 'rotateY-0');
+                    console.log('Applied rotation class:', rotateClass, 'showStockInfo:', showStockInfo, 'isFlipping:', isFlipping);
+                    return rotateClass;
+                  })()
                 }`}
                 style={{ transformStyle: 'preserve-3d' }}
               >
