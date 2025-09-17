@@ -376,13 +376,6 @@ export default function InteractiveDemo() {
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
     setShowStockInfo(!showStockInfo);
-    
-    // Scroll to top when showing stock info
-    if (!showStockInfo) {
-      setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 100);
-    }
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -493,7 +486,7 @@ export default function InteractiveDemo() {
 
   return (
     <section className="max-w-4xl mx-auto px-4 py-20">
-      <div className="text-center mb-12">
+      <div className="text-center mb-8">
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
