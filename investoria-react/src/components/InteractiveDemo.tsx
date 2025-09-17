@@ -669,10 +669,7 @@ export default function InteractiveDemo() {
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">🎉 City Complete!</div>
                 <p className="text-investoria-muted text-sm">
-                  {showStockInfo 
-                    ? 'Tap the grid to flip back to city view' 
-                    : 'Tap the grid to flip and see stock information'
-                  }
+                  Great job building your investment city! Check out the stock information for your chosen sector below.
                 </p>
               </div>
             )}
@@ -1103,14 +1100,6 @@ export default function InteractiveDemo() {
                   >
                     {grid.map((tile, index) => renderGridTile(tile, index))}
                   </div>
-                  {currentStep === 'complete' && (
-                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
-                      <div className="text-center text-white">
-                        <div className="text-lg font-bold mb-1">📊 View Stock Info</div>
-                        <div className="text-sm">Tap to flip</div>
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* Back Side - Stock Information */}
@@ -1220,8 +1209,24 @@ export default function InteractiveDemo() {
         </div>
       </div>
       
-      {/* Centralized Start Over Button */}
-      <div className="flex justify-center mt-8">
+      {/* Action Buttons */}
+      <div className="flex justify-center items-center gap-4 mt-8">
+        {/* View Stock Info Button - Only visible when complete */}
+        {currentStep === 'complete' && (
+          <button
+            onClick={handleGridFlip}
+            className="group px-6 py-3 bg-gradient-to-r from-green-400/20 to-green-500/20 hover:from-green-400/30 hover:to-green-500/30 text-green-400 rounded-xl transition-all duration-300 font-semibold border border-green-400/30 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-400/10 hover:scale-105 animate-fade-in"
+          >
+            <span className="flex items-center gap-2">
+              <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+              </svg>
+              {showStockInfo ? 'View City' : 'View Stock Info'}
+            </span>
+          </button>
+        )}
+        
+        {/* Start Over Button */}
         <button
           onClick={resetGrid}
           className="group px-6 py-3 bg-gradient-to-r from-gold-400/20 to-gold-500/20 hover:from-gold-400/30 hover:to-gold-500/30 text-gold-400 rounded-xl transition-all duration-300 font-semibold border border-gold-400/30 hover:border-gold-400/50 hover:shadow-lg hover:shadow-gold-400/10 hover:scale-105"
