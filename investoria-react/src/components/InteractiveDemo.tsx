@@ -99,12 +99,64 @@ export default function InteractiveDemo() {
     const filledTiles = grid.filter(tile => tile.type !== 'empty').length;
     if (filledTiles === 9 && currentStep !== 'complete') {
       console.log('🎯 COMPLETION START: scrollY =', window.scrollY, 'isMobile =', isMobile);
+      
+      // Log viewport and element positions
+      const viewport = {
+        width: window.innerWidth,
+        height: window.innerHeight,
+        scrollY: window.scrollY,
+        scrollX: window.scrollX
+      };
+      console.log('📱 VIEWPORT:', viewport);
+      
       setIsTransitioning(true);
       
       const timer = setTimeout(() => {
         console.log('✅ COMPLETION DONE: setting step to complete');
         setCurrentStep('complete');
         setIsTransitioning(false);
+        
+        // Log element positions after completion
+        setTimeout(() => {
+          const header = document.querySelector('h2');
+          const grid = document.querySelector('.aspect-square');
+          const section = document.querySelector('section');
+          
+          if (header) {
+            const headerRect = header.getBoundingClientRect();
+            console.log('📍 HEADER POSITION:', {
+              top: headerRect.top,
+              bottom: headerRect.bottom,
+              height: headerRect.height,
+              visible: headerRect.top >= 0 && headerRect.top < window.innerHeight
+            });
+          }
+          
+          if (grid) {
+            const gridRect = grid.getBoundingClientRect();
+            console.log('🎮 GRID POSITION:', {
+              top: gridRect.top,
+              bottom: gridRect.bottom,
+              height: gridRect.height,
+              visible: gridRect.top >= 0 && gridRect.top < window.innerHeight
+            });
+          }
+          
+          if (section) {
+            const sectionRect = section.getBoundingClientRect();
+            console.log('📄 SECTION POSITION:', {
+              top: sectionRect.top,
+              bottom: sectionRect.bottom,
+              height: sectionRect.height
+            });
+          }
+          
+          console.log('🔍 FINAL VIEWPORT:', {
+            scrollY: window.scrollY,
+            scrollX: window.scrollX,
+            innerHeight: window.innerHeight
+          });
+        }, 100);
       }, 500);
       
       return () => clearTimeout(timer);
@@ -511,8 +563,8 @@ export default function InteractiveDemo() {
 
   return (
     <section className="max-w-4xl mx-auto px-4 py-20">
-      {/* Always visible header */}
-      <div className="text-center mb-8">
+      {/* Always visible header - with debug border */}
+      <div className={`text-center mb-8 ${currentStep === 'complete' && isMobile ? 'border-4 border-red-500' : ''}`}>
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
@@ -1089,7 +1141,7 @@ export default function InteractiveDemo() {
         <div className={`lg:hidden flex justify-center ${currentStep === 'complete' && isMobile ? 'mt-8' : ''}`}>
           <div className="w-full max-w-sm">
             <div 
-              className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20"
+              className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 ${currentStep === 'complete' ? 'border-blue-500 border-4' : 'border-gold-400/20'}`}
               style={{ perspective: '1000px' }}
             >
               {/* Grid Container with Flip Animation */}
