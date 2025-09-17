@@ -510,9 +510,9 @@ export default function InteractiveDemo() {
 
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-20">
+    <section className={`max-w-4xl mx-auto px-4 ${currentStep === 'complete' && isMobile ? 'py-12' : 'py-20'}`}>
       {/* Always visible header */}
-      <div className="text-center mb-8">
+      <div className={`text-center ${currentStep === 'complete' && isMobile ? 'mb-4' : 'mb-8'}`}>
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
@@ -523,7 +523,7 @@ export default function InteractiveDemo() {
       </div>
 
       {/* Mobile-Optimized Layout */}
-      <div className="space-y-6">
+      <div className={`space-y-6 ${currentStep === 'complete' && isMobile ? 'mt-4' : ''}`}>
         {/* Mobile: Compact Instructions at Top */}
         {currentStep !== 'complete' && (
           <div className="lg:hidden">
