@@ -26,15 +26,30 @@ export default function Screenshots() {
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const total = screenshots.length;
 
-  // Auto-advance carousel
+  // Listen for pause events from city demo
   useEffect(() => {
+    const handlePauseEvent = (event: CustomEvent) => {
+      const shouldPause = event.detail;
+      setIsPaused(shouldPause);
+      console.log('📸 Screenshots slideshow:', shouldPause ? 'PAUSED' : 'RESUMED');
+    };
+
+    window.addEventListener('pauseSlideshows', handlePauseEvent as EventListener);
+    return () => window.removeEventListener('pauseSlideshows', handlePauseEvent as EventListener);
+  }, []);
+
+  // Auto-advance carousel (only when not paused)
+  useEffect(() => {
+    if (isPaused) return;
+    
     const interval = setInterval(() => {
       setCurrentIndex((current) => (current + 1) % total);
     }, 5000);
     return () => clearInterval(interval);
-  }, [total]);
+  }, [total, isPaused]);
 
   const goToPrevious = () => {
     setCurrentIndex((current) => (current + total - 1) % total);

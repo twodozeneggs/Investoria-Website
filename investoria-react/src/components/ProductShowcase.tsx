@@ -46,6 +46,18 @@ export default function ProductShowcase() {
   const [isPaused, setIsPaused] = useState(false);
   const { ref: sectionRef, isVisible } = useScrollAnimation(0.2);
 
+  // Listen for pause events from city demo
+  useEffect(() => {
+    const handlePauseEvent = (event: CustomEvent) => {
+      const shouldPause = event.detail;
+      setIsPaused(shouldPause);
+      console.log('🎯 ProductShowcase slideshow:', shouldPause ? 'PAUSED' : 'RESUMED');
+    };
+
+    window.addEventListener('pauseSlideshows', handlePauseEvent as EventListener);
+    return () => window.removeEventListener('pauseSlideshows', handlePauseEvent as EventListener);
+  }, []);
+
   useEffect(() => {
     if (isPaused) return;
     

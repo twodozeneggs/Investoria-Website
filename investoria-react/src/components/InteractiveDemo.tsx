@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type TileType = 'empty' | 'building' | 'terrain' | 'pet';
 type GameStep = 'building' | 'terrain' | 'pet' | 'complete';
@@ -55,6 +55,18 @@ export default function InteractiveDemo() {
     Array(9).fill(null).map(() => ({ type: 'empty', id: null }))
   );
   const [currentStep, setCurrentStep] = useState<GameStep>('building');
+  
+  // Signal to pause slideshows when city is complete
+  useEffect(() => {
+    if (currentStep === 'complete') {
+      // Dispatch a custom event to pause slideshows
+      window.dispatchEvent(new CustomEvent('pauseSlideshows', { detail: true }));
+      console.log('🛑 PAUSING SLIDESHOWS - City completed');
+    } else {
+      // Resume slideshows when not complete
+      window.dispatchEvent(new CustomEvent('pauseSlideshows', { detail: false }));
+    }
+  }, [currentStep]);
   const [flippedTile, setFlippedTile] = useState<number | null>(null);
   const [placedBuilding, setPlacedBuilding] = useState(false);
   const [placedTerrain, setPlacedTerrain] = useState(false);
