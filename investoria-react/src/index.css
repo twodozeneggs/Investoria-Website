@@ -70,3 +70,20 @@ body {
 #root {
   min-height: 100vh;
 }
+
+/* 3D Flip Animation Classes */
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotateY-0 {
+  transform: rotateY(0deg);
+}
+
+.rotateY-180 {
+  transform: rotateY(180deg);
+}
+
+.transform-gpu {
+  transform: translateZ(0);
+}

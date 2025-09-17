@@ -64,6 +64,8 @@ export default function InteractiveDemo() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
+  const [showStockInfo, setShowStockInfo] = useState(false);
+  const [isFlipping, setIsFlipping] = useState(false);
 
   // Auto-complete when grid is completely filled
   useEffect(() => {
@@ -321,6 +323,18 @@ export default function InteractiveDemo() {
     setTerrainCount(0);
     setCityLifeCount(0);
     setSelectedItem(null);
+    setShowStockInfo(false);
+    setIsFlipping(false);
+  };
+
+  const handleGridFlip = () => {
+    if (currentStep !== 'complete') return;
+    
+    setIsFlipping(true);
+    setTimeout(() => {
+      setShowStockInfo(!showStockInfo);
+      setTimeout(() => setIsFlipping(false), 300);
+    }, 300);
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -603,7 +617,12 @@ export default function InteractiveDemo() {
             {currentStep === 'complete' && (
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">🎉 City Complete!</div>
-                <p className="text-investoria-muted text-sm">Tap any building to see stock information</p>
+                <p className="text-investoria-muted text-sm">
+                  {showStockInfo 
+                    ? 'Tap the grid to flip back to city view' 
+                    : 'Tap the grid to flip and see stock information'
+                  }
+                </p>
               </div>
             )}
           </div>
@@ -997,8 +1016,90 @@ export default function InteractiveDemo() {
         {/* Mobile: Interactive Grid */}
         <div className="lg:hidden flex justify-center">
           <div className="w-full max-w-sm">
-            <div className="grid grid-cols-3 gap-0 aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20">
-              {grid.map((tile, index) => renderGridTile(tile, index))}
+            <div 
+              className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20 ${
+                currentStep === 'complete' ? 'cursor-pointer' : ''
+              }`}
+              onClick={currentStep === 'complete' ? handleGridFlip : undefined}
+              style={{ perspective: '1000px' }}
+            >
+              {/* Grid Container with Flip Animation */}
+              <div 
+                className={`w-full h-full transition-transform duration-700 transform-gpu ${
+                  isFlipping 
+                    ? (showStockInfo ? 'rotateY-180' : 'rotateY-0') 
+                    : (showStockInfo ? 'rotateY-180' : 'rotateY-0')
+                }`}
+                style={{ transformStyle: 'preserve-3d' }}
+              >
+                {/* Front Side - City Grid */}
+                <div 
+                  className="absolute inset-0 w-full h-full backface-hidden"
+                  style={{ backfaceVisibility: 'hidden' }}
+                >
+                  <div className="grid grid-cols-3 gap-0 w-full h-full">
+                    {grid.map((tile, index) => renderGridTile(tile, index))}
+                  </div>
+                  {currentStep === 'complete' && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                      <div className="text-center text-white">
+                        <div className="text-lg font-bold mb-1">📊 View Stock Info</div>
+                        <div className="text-sm">Tap to flip</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Back Side - Stock Information */}
+                <div 
+                  className="absolute inset-0 w-full h-full backface-hidden rotateY-180 bg-gradient-to-br from-green-700 to-green-900 p-4 flex flex-col justify-center"
+                  style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                >
+                  {(() => {
+                    // Find the building in the grid
+                    const buildingTile = grid.find(tile => tile.type === 'building');
+                    if (!buildingTile || !buildingTile.data) return null;
+                    
+                    const building = buildingTile.data as StockBuilding;
+                    return (
+                      <div className="text-center text-white h-full flex flex-col justify-center">
+                        <div className="mb-4">
+                          <img 
+                            src={building.emoji} 
+                            alt={building.name} 
+                            className="w-16 h-16 mx-auto mb-2 rounded-lg bg-green-600/30 p-2" 
+                          />
+                          <div className="text-2xl font-bold text-gold-400">{building.symbol}</div>
+                          <div className="text-lg text-green-300">{building.name}</div>
+                        </div>
+                        
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Stock Price:</span>
+                            <span className="text-white font-bold">{building.price}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Change:</span>
+                            <span className="text-green-400 font-bold">{building.change} ({building.changePercent})</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Investment:</span>
+                            <span className="text-white font-bold">{building.investment}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Current Value:</span>
+                            <span className="text-green-400 font-bold">{building.currentValue}</span>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-4 text-xs text-green-300">
+                          Tap to flip back to city
+                        </div>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
             </div>
           </div>
         </div>
