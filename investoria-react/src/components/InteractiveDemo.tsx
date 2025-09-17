@@ -187,7 +187,7 @@ export default function InteractiveDemo() {
                 console.log('🔧 FINE-TUNE ADJUSTMENT: scrolled up 30px more');
               }, 100);
               
-              // Log after scroll attempt
+              // Log after scroll attempt and monitor for layout shifts
               setTimeout(() => {
                 const afterScrollRect = header.getBoundingClientRect();
                 console.log('📍 AFTER SCROLL INTO VIEW:', {
@@ -195,6 +195,28 @@ export default function InteractiveDemo() {
                   scrollY: window.scrollY,
                   success: afterScrollRect.top >= 0 && afterScrollRect.top < 100
                 });
+                
+                // Set up a layout shift monitor for the next 10 seconds
+                let shiftCount = 0;
+                const shiftMonitor = setInterval(() => {
+                  const currentRect = header.getBoundingClientRect();
+                  if (currentRect.top < -10) { // If header goes above viewport again
+                    console.log('🔄 LAYOUT SHIFT DETECTED - Re-adjusting scroll');
+                    header.scrollIntoView({ 
+                      behavior: 'smooth', 
+                      block: 'start',
+                      inline: 'nearest' 
+                    });
+                    shiftCount++;
+                    if (shiftCount >= 3) {
+                      console.log('⚠️ Too many shifts, stopping monitor');
+                      clearInterval(shiftMonitor);
+                    }
+                  }
+                }, 2000); // Check every 2 seconds
+                
+                // Clear monitor after 10 seconds
+                setTimeout(() => clearInterval(shiftMonitor), 10000);
               }, 1000);
             }
           } else {
