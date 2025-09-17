@@ -809,22 +809,22 @@ export default function InteractiveDemo() {
                       key={item.id}
                       onClick={() => handleItemSelect(item, 'building')}
                       draggable={!isMobile}
-                    onDragStart={(e) => handleDragStart(e, item, 'building')}
-                      className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
-                      selectedItem?.item.id === item.id && selectedItem?.type === 'building'
-                        ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
-                        : 'hover:ring-gold-400/30'
-                    }`}
+                      onDragStart={(e) => handleDragStart(e, item, 'building')}
+                      className="aspect-square rounded-xl bg-transparent hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer"
                     >
                       <div className="flex-1 flex items-center justify-center w-full">
                         <img 
                           src={item.emoji} 
                           alt={item.name}
-                          className="w-full h-full object-contain group-hover:scale-110 transition-transform pixelated pointer-events-none rounded-lg"
+                          className={`w-full h-full object-contain group-hover:scale-110 transition-transform pixelated pointer-events-none rounded-lg ${
+                            selectedItem?.item.id === item.id && selectedItem?.type === 'building'
+                              ? 'ring-2 ring-white' 
+                              : 'group-hover:ring-2 group-hover:ring-white/70'
+                          }`}
                           style={{ imageRendering: 'pixelated' }}
                         />
                       </div>
-                      <span className="text-xs text-white font-semibold text-center leading-tight pointer-events-none px-1 flex-shrink-0">
+                      <span className="text-xs text-white font-semibold text-center leading-tight pointer-events-none px-1 pt-2 flex-shrink-0">
                         {item.name}
                       </span>
                     </div>
@@ -894,7 +894,7 @@ export default function InteractiveDemo() {
                           } ${
                             selectedItem?.item.id === item.id && selectedItem?.type === 'terrain'
                               ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
-                              : 'hover:ring-yellow-400/60'
+                              : 'hover:ring-gold-400/30'
                           }`}
                           style={{ 
                             animationDelay: `${index * 50}ms`,
@@ -920,7 +920,7 @@ export default function InteractiveDemo() {
                           } ${
                             selectedItem?.item.id === item.id && selectedItem?.type === 'pet'
                               ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
-                              : 'hover:ring-yellow-400/60'
+                              : 'hover:ring-gold-400/30'
                           }`}
                           style={{ 
                             animationDelay: `${index * 50}ms`,
