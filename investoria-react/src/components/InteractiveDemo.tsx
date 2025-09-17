@@ -157,14 +157,26 @@ export default function InteractiveDemo() {
             innerHeight: window.innerHeight
           });
           
-          // Fix: If header is above viewport, scroll to make it visible
+          // Fix: If header is above viewport, scroll to bring it into view
           if (header) {
             const currentHeaderRect = header.getBoundingClientRect();
             if (currentHeaderRect.top < 0) {
-              const scrollAdjustment = Math.abs(currentHeaderRect.top) + 20; // Add 20px padding
-              console.log('🔧 SCROLLING UP BY:', scrollAdjustment);
+              // Calculate where we want the header to be (20px from top)
+              const targetPosition = 20;
+              const currentScrollY = window.scrollY;
+              // We need to scroll up by the amount the header is above viewport, minus our target position
+              const newScrollY = currentScrollY + currentHeaderRect.top - targetPosition;
+              const finalScrollY = Math.max(0, newScrollY); // Don't go below 0
+              
+              console.log('🔧 HEADER CORRECTION:', {
+                headerTop: currentHeaderRect.top,
+                currentScrollY: currentScrollY,
+                newScrollY: newScrollY,
+                finalScrollY: finalScrollY
+              });
+              
               window.scrollTo({
-                top: Math.max(0, window.scrollY - scrollAdjustment),
+                top: finalScrollY,
                 behavior: 'smooth'
               });
             }
