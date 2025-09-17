@@ -376,6 +376,13 @@ export default function InteractiveDemo() {
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
     setShowStockInfo(!showStockInfo);
+    
+    // Scroll to top when showing stock info
+    if (!showStockInfo) {
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 100);
+    }
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -665,14 +672,6 @@ export default function InteractiveDemo() {
               </div>
             )}
 
-            {currentStep === 'complete' && (
-              <div className="text-center">
-                <div className="text-lg font-bold text-gold-400 mb-2">🎉 City Complete!</div>
-                <p className="text-investoria-muted text-sm">
-                  Great job building your investment city! Check out the stock information for your chosen sector below.
-                </p>
-              </div>
-            )}
           </div>
         </div>
 
