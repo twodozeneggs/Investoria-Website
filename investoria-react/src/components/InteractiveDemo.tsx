@@ -98,59 +98,16 @@ export default function InteractiveDemo() {
   useEffect(() => {
     const filledTiles = grid.filter(tile => tile.type !== 'empty').length;
     if (filledTiles === 9 && currentStep !== 'complete') {
-      // Store current scroll position and prevent any scrolling
-      const currentScrollY = window.scrollY;
-      console.log('🎯 COMPLETION START: scrollY =', currentScrollY, 'isMobile =', isMobile);
+      console.log('🎯 COMPLETION START: scrollY =', window.scrollY, 'isMobile =', isMobile);
       setIsTransitioning(true);
       
-      // Prevent scrolling during transition
-      const preventScroll = (e: Event) => {
-        console.log('🚫 SCROLL PREVENTED: trying to scroll to', window.scrollY, 'keeping at', currentScrollY);
-        e.preventDefault();
-        window.scrollTo(0, currentScrollY);
-      };
-      
-      // Add scroll prevention
-      window.addEventListener('scroll', preventScroll, { passive: false });
-      document.body.style.overflow = 'hidden';
-      
       const timer = setTimeout(() => {
-        console.log('✅ COMPLETION DONE: setting step to complete, scrollY =', window.scrollY);
+        console.log('✅ COMPLETION DONE: setting step to complete');
         setCurrentStep('complete');
         setIsTransitioning(false);
-        
-        // Remove scroll prevention
-        window.removeEventListener('scroll', preventScroll);
-        document.body.style.overflow = '';
-        
-        // Ensure we're at the right position
-        const finalScrollY = window.scrollY;
-        console.log('🔄 FINAL SCROLL: was at', finalScrollY, 'setting to', currentScrollY);
-        window.scrollTo(0, currentScrollY);
-        
-        // Check if it actually worked
-        setTimeout(() => {
-          console.log('🎉 RESULT: final scrollY =', window.scrollY, 'should be', currentScrollY);
-          
-          // Monitor for late scrolling
-          const monitorLateScroll = () => {
-            const lateScrollY = window.scrollY;
-            if (lateScrollY !== currentScrollY) {
-              console.log('⚠️ LATE SCROLL DETECTED:', lateScrollY, 'vs expected', currentScrollY);
-            }
-          };
-          
-          setTimeout(monitorLateScroll, 200);
-          setTimeout(monitorLateScroll, 500);
-          setTimeout(monitorLateScroll, 1000);
-        }, 100);
       }, 500);
       
-      return () => {
-        clearTimeout(timer);
-        window.removeEventListener('scroll', preventScroll);
-        document.body.style.overflow = '';
-      };
+      return () => clearTimeout(timer);
     }
   }, [grid, currentStep]);
 
@@ -442,27 +399,8 @@ export default function InteractiveDemo() {
 
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
-    
-    // Lock scroll position completely
-    const currentScrollY = window.scrollY;
-    console.log('🔄 GRID FLIP START: scrollY =', currentScrollY, 'showStockInfo =', showStockInfo);
-    
-    // Prevent any scrolling during flip
-    const preventScroll = () => {
-      console.log('🚫 FLIP SCROLL PREVENTED: keeping at', currentScrollY);
-      window.scrollTo(0, currentScrollY);
-    };
-    
-    window.addEventListener('scroll', preventScroll);
-    
+    console.log('🔄 GRID FLIP: showStockInfo =', showStockInfo);
     setShowStockInfo(!showStockInfo);
-    
-    // Remove scroll prevention after a short delay
-    setTimeout(() => {
-      window.removeEventListener('scroll', preventScroll);
-      window.scrollTo(0, currentScrollY);
-      console.log('🎉 GRID FLIP END: final scrollY =', window.scrollY);
-    }, 100);
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -573,6 +511,7 @@ export default function InteractiveDemo() {
 
   return (
     <section className="max-w-4xl mx-auto px-4 py-20">
+      {/* Always visible header */}
       <div className="text-center mb-8">
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
@@ -1150,10 +1089,7 @@ export default function InteractiveDemo() {
         <div className="lg:hidden flex justify-center">
           <div className="w-full max-w-sm">
             <div 
-              className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20 ${
-                currentStep === 'complete' ? 'cursor-pointer' : ''
-              }`}
-              onClick={currentStep === 'complete' ? handleGridFlip : undefined}
+              className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20"
               style={{ perspective: '1000px' }}
             >
               {/* Grid Container with Flip Animation */}
