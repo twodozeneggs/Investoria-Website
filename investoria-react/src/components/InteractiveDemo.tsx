@@ -273,6 +273,11 @@ export default function InteractiveDemo() {
   const handleTileClick = (gridIndex: number) => {
     const tile = grid[gridIndex];
     
+    // If game is complete, let the parent grid handle the click for flipping
+    if (currentStep === 'complete') {
+      return; // Don't handle tile clicks when complete, let parent handle grid flip
+    }
+    
     // If clicking a building tile, flip it to show stock info
     if (tile.type === 'building') {
       setFlippedTile(flippedTile === gridIndex ? null : gridIndex);
