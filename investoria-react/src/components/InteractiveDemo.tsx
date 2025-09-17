@@ -63,6 +63,7 @@ export default function InteractiveDemo() {
   const [cityLifeCount, setCityLifeCount] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
 
   // Auto-complete when grid is completely filled
   useEffect(() => {
@@ -263,11 +264,51 @@ export default function InteractiveDemo() {
   ];
 
 
+  const handleItemSelect = (item: any, type: TileType) => {
+    setSelectedItem({ item, type });
+  };
+
   const handleTileClick = (gridIndex: number) => {
     const tile = grid[gridIndex];
+    
+    // If clicking a building tile, flip it to show stock info
     if (tile.type === 'building') {
       setFlippedTile(flippedTile === gridIndex ? null : gridIndex);
+      return;
     }
+    
+    // If we have a selected item and tile is empty, place it
+    if (selectedItem && tile.type === 'empty') {
+      handlePlacement(gridIndex, selectedItem.item, selectedItem.type);
+      setSelectedItem(null); // Clear selection after placement
+    }
+  };
+
+  const handlePlacement = (gridIndex: number, item: any, itemType: TileType) => {
+    // Buildings can only go in center (index 4)
+    if (itemType === 'building' && gridIndex !== 4) return;
+    
+    const newGrid = [...grid];
+    newGrid[gridIndex] = {
+      type: itemType,
+      id: item.id,
+      data: item
+    };
+
+    // If placing building, also place road
+    if (itemType === 'building' && gridIndex === 4) {
+      newGrid[7] = { type: 'terrain', id: 'road', data: { id: 'road', name: 'Road', emoji: './road6.png' } };
+      setPlacedBuilding(true);
+      setCurrentStep('terrain');
+    } else if (itemType === 'terrain') {
+      setTerrainCount(terrainCount + 1);
+      setPlacedTerrain(true);
+    } else if (itemType === 'pet') {
+      setCityLifeCount(cityLifeCount + 1);
+      setPlacedPet(true);
+    }
+
+    setGrid(newGrid);
   };
 
   const resetGrid = () => {
@@ -279,6 +320,7 @@ export default function InteractiveDemo() {
     setPlacedPet(false);
     setTerrainCount(0);
     setCityLifeCount(0);
+    setSelectedItem(null);
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
@@ -286,24 +328,28 @@ export default function InteractiveDemo() {
     const isCenter = index === 4;
     const isBottomCenter = index === 7;
     
+    // Check if this tile should be highlighted as available
+    const shouldHighlight = selectedItem && tile.type === 'empty' &&
+      (selectedItem.type !== 'building' || isCenter);
+    
     return (
       <div
         key={index}
         onClick={() => handleTileClick(index)}
-        onDragOver={handleDragOver}
-        onDragEnter={(e) => handleDragEnter(e, index)}
-        onDragLeave={handleDragLeave}
-        onDrop={(e) => handleDrop(e, index)}
         className={`
           relative aspect-square
-          transition-all duration-300 cursor-pointer
+          transition-all duration-300 
           ${tile.type === 'empty' 
-            ? `${isCenter ? 'bg-white/8 backdrop-blur-sm border border-gold-400/20 hover:bg-gold-400/20 hover:backdrop-blur-md hover:border-gold-400/40' : 
-                isBottomCenter ? 'bg-white/8 backdrop-blur-sm border border-green-400/20 hover:bg-green-400/20 hover:backdrop-blur-md hover:border-green-400/40' :
-                'bg-green-800/20 backdrop-blur-sm border border-white/10 hover:bg-white/15 hover:backdrop-blur-sm hover:border-white/20'}` 
-            : 'bg-transparent hover:bg-white/5 hover:backdrop-blur-sm'
+            ? `${shouldHighlight 
+                ? 'bg-gold-400/30 backdrop-blur-md ring-2 ring-gold-400/50 border-2 border-gold-400/80 cursor-pointer animate-pulse' 
+                : isCenter 
+                  ? 'bg-white/8 backdrop-blur-sm border border-gold-400/20 hover:bg-gold-400/20 hover:backdrop-blur-md hover:border-gold-400/40 cursor-pointer' 
+                  : isBottomCenter 
+                    ? 'bg-white/8 backdrop-blur-sm border border-green-400/20 hover:bg-green-400/20 hover:backdrop-blur-md hover:border-green-400/40 cursor-pointer' 
+                    : 'bg-green-800/20 backdrop-blur-sm border border-white/10 hover:bg-white/15 hover:backdrop-blur-sm hover:border-white/20 cursor-pointer'
+              }` 
+            : 'bg-transparent hover:bg-white/5 hover:backdrop-blur-sm cursor-pointer'
           }
-          ${draggedOver === index && tile.type === 'empty' ? 'bg-gold-400/30 backdrop-blur-md ring-2 ring-gold-400/50 border-gold-400/60' : ''}
         `}
       >
         {tile.type === 'empty' ? (
@@ -365,45 +411,6 @@ export default function InteractiveDemo() {
     );
   };
 
-  const handleStepPlacement = (item: any) => {
-    if (currentStep === 'building') {
-      // Place building in center (index 4) and road in bottom center (index 7)
-      const newGrid = [...grid];
-      newGrid[4] = { type: 'building', id: item.id, data: item };
-      newGrid[7] = { type: 'terrain', id: 'road', data: { id: 'road', name: 'Road', emoji: './road6.png' } };
-      setGrid(newGrid);
-      setPlacedBuilding(true);
-      setCurrentStep('terrain');
-    } else if (currentStep === 'terrain') {
-      // Find the first empty tile for terrain
-      const emptyIndex = grid.findIndex(tile => tile.type === 'empty');
-      if (emptyIndex !== -1) {
-        const newGrid = [...grid];
-        newGrid[emptyIndex] = {
-          type: 'terrain',
-          id: item.id,
-          data: item
-        };
-        setGrid(newGrid);
-        setTerrainCount(terrainCount + 1);
-        setPlacedTerrain(true);
-      }
-    } else if (currentStep === 'pet') {
-      // Place city life item
-      const emptyIndex = grid.findIndex(tile => tile.type === 'empty');
-      if (emptyIndex !== -1) {
-        const newGrid = [...grid];
-        newGrid[emptyIndex] = {
-          type: 'pet',
-          id: item.id,
-          data: item
-        };
-        setGrid(newGrid);
-        setCityLifeCount(cityLifeCount + 1);
-        setPlacedPet(true);
-      }
-    }
-  };
 
   // Function to switch between terrain and city life steps with fade animation
   const switchToStep = (step: GameStep) => {
@@ -418,79 +425,6 @@ export default function InteractiveDemo() {
     }
   };
 
-  // Drag and Drop handlers
-  const handleDragStart = (e: React.DragEvent, item: any, itemType: TileType) => {
-    e.dataTransfer.setData('application/json', JSON.stringify({ item, itemType }));
-    e.dataTransfer.effectAllowed = 'copy';
-    
-    // Add visual feedback - make the dragged element slightly transparent
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.opacity = '0.7';
-    }
-  };
-
-  const [draggedOver, setDraggedOver] = useState<number | null>(null);
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = 'copy';
-  };
-
-  const handleDragEnter = (e: React.DragEvent, index: number) => {
-    e.preventDefault();
-    setDraggedOver(index);
-  };
-
-  const handleDragLeave = (e: React.DragEvent) => {
-    e.preventDefault();
-    // Only clear if we're leaving the entire grid area
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
-      setDraggedOver(null);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent, gridIndex: number) => {
-    e.preventDefault();
-    setDraggedOver(null); // Clear drag state
-    
-    const data = JSON.parse(e.dataTransfer.getData('application/json'));
-    const { item, itemType } = data;
-
-    // Don't allow dropping on occupied tiles
-    if (grid[gridIndex].type !== 'empty') return;
-
-    // Buildings can only go in center (index 4)
-    if (itemType === 'building' && gridIndex !== 4) return;
-
-    const newGrid = [...grid];
-    newGrid[gridIndex] = {
-      type: itemType,
-      id: item.id,
-      data: item
-    };
-
-    // If placing building, also place road
-    if (itemType === 'building' && gridIndex === 4) {
-      newGrid[7] = { type: 'terrain', id: 'road', data: { id: 'road', name: 'Road', emoji: './road6.png' } };
-      setPlacedBuilding(true);
-      setCurrentStep('terrain');
-    } else if (itemType === 'terrain') {
-      setTerrainCount(terrainCount + 1);
-      setPlacedTerrain(true);
-    } else if (itemType === 'pet') {
-      setCityLifeCount(cityLifeCount + 1);
-      setPlacedPet(true);
-    }
-
-    setGrid(newGrid);
-  };
-
-  const handleDragEnd = (e: React.DragEvent) => {
-    // Reset opacity
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.opacity = '1';
-    }
-  };
 
 
   return (
@@ -551,24 +485,33 @@ export default function InteractiveDemo() {
             {currentStep === 'building' && (
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">Choose Your Building</div>
-                <p className="text-investoria-muted text-sm mb-4">Tap or drag a building to start your city</p>
+                <p className="text-investoria-muted text-sm mb-4">
+                  {selectedItem && selectedItem.type === 'building' 
+                    ? 'Now click the center tile to place your building!' 
+                    : 'Select a building, then click the center tile to place it'}
+                </p>
                 <div className="grid grid-cols-3 gap-2">
                   {stockBuildings.map((building) => (
                     <div
                       key={building.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, building, 'building')}
-                      onDragEnd={handleDragEnd}
-                      onClick={() => handleStepPlacement(building)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 select-none"
+                      onClick={() => handleItemSelect(building, 'building')}
+                      className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none ${
+                        selectedItem?.item.id === building.id && selectedItem?.type === 'building'
+                          ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
+                          : 'border-gold-400/20 hover:border-gold-400/50'
+                      }`}
                     >
                       <img 
                         src={building.emoji} 
                         alt={building.name} 
-                        className="w-full h-8 object-contain mb-1 pointer-events-none drag-none" 
-                        draggable={false}
+                        className="w-full h-8 object-contain mb-1 pointer-events-none" 
                       />
                       <div className="text-xs text-center text-gold-400 font-medium pointer-events-none">{building.name}</div>
+                      {selectedItem?.item.id === building.id && selectedItem?.type === 'building' && (
+                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                          ✓
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -578,7 +521,11 @@ export default function InteractiveDemo() {
             {(currentStep === 'terrain' || currentStep === 'pet') && (
               <div className="text-center">
                 <div className="text-lg font-bold text-gold-400 mb-2">Decorate Your City</div>
-                <p className="text-investoria-muted text-sm mb-4">Tap or drag items to make your city unique!</p>
+                <p className="text-investoria-muted text-sm mb-4">
+                  {selectedItem 
+                    ? 'Click any empty tile to place your selected item!' 
+                    : 'Select an item, then click an empty tile to place it'}
+                </p>
                 
                 {/* Mobile Toggle Buttons */}
                 <div className="flex justify-center mb-4 gap-2">
@@ -608,35 +555,45 @@ export default function InteractiveDemo() {
                   {currentStep === 'terrain' && terrainItems.map((item) => (
                     <div
                       key={item.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, item, 'terrain')}
-                      onDragEnd={handleDragEnd}
-                      onClick={() => handleStepPlacement(item)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 select-none"
+                      onClick={() => handleItemSelect(item, 'terrain')}
+                      className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none relative ${
+                        selectedItem?.item.id === item.id && selectedItem?.type === 'terrain'
+                          ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
+                          : 'border-gold-400/20 hover:border-gold-400/50'
+                      }`}
                     >
                       <img 
                         src={item.emoji} 
                         alt={item.name} 
-                        className="w-full h-6 object-contain pointer-events-none drag-none" 
-                        draggable={false}
+                        className="w-full h-6 object-contain pointer-events-none" 
                       />
+                      {selectedItem?.item.id === item.id && selectedItem?.type === 'terrain' && (
+                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                          ✓
+                        </div>
+                      )}
                     </div>
                   ))}
                   {currentStep === 'pet' && pets.map((pet) => (
                     <div
                       key={pet.id}
-                      draggable
-                      onDragStart={(e) => handleDragStart(e, pet, 'pet')}
-                      onDragEnd={handleDragEnd}
-                      onClick={() => handleStepPlacement(pet)}
-                      className="bg-green-600/30 rounded-lg p-2 cursor-grab active:cursor-grabbing hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border border-gold-400/20 hover:border-gold-400/50 hover:scale-105 active:scale-95 text-center select-none"
+                      onClick={() => handleItemSelect(pet, 'pet')}
+                      className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 text-center select-none relative ${
+                        selectedItem?.item.id === pet.id && selectedItem?.type === 'pet'
+                          ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
+                          : 'border-gold-400/20 hover:border-gold-400/50'
+                      }`}
                     >
                       <img 
                         src={pet.emoji} 
                         alt={pet.name} 
-                        className="w-full h-6 object-contain pointer-events-none drag-none" 
-                        draggable={false}
+                        className="w-full h-6 object-contain pointer-events-none" 
                       />
+                      {selectedItem?.item.id === pet.id && selectedItem?.type === 'pet' && (
+                        <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                          ✓
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -713,11 +670,12 @@ export default function InteractiveDemo() {
                   {stockBuildings.map((item) => (
                     <div
                       key={item.id}
-                    draggable
-                    onDragStart={(e) => handleDragStart(e, item, 'building')}
-                    onDragEnd={handleDragEnd}
-                    onClick={() => handleStepPlacement(item)}
-                    className="aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-gold-400/30 overflow-hidden"
+                    onClick={() => handleItemSelect(item, 'building')}
+                    className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
+                      selectedItem?.item.id === item.id && selectedItem?.type === 'building'
+                        ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
+                        : 'hover:ring-gold-400/30'
+                    }`}
                     >
                       <div className="flex-1 flex items-center justify-center w-full">
                         <img 
@@ -789,12 +747,13 @@ export default function InteractiveDemo() {
                     ? terrainItems.map((item, index) => (
                         <div
                           key={item.id}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, item, 'terrain')}
-                          onDragEnd={handleDragEnd}
-                          onClick={() => handleStepPlacement(item)}
-                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-yellow-400/60 overflow-hidden ${
+                          onClick={() => handleItemSelect(item, 'terrain')}
+                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
+                          } ${
+                            selectedItem?.item.id === item.id && selectedItem?.type === 'terrain'
+                              ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
+                              : 'hover:ring-yellow-400/60'
                           }`}
                           style={{ 
                             animationDelay: `${index * 50}ms`,
@@ -812,12 +771,13 @@ export default function InteractiveDemo() {
                     : pets.map((item, index) => (
                         <div
                           key={item.id}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, item, 'pet')}
-                          onDragEnd={handleDragEnd}
-                          onClick={() => handleStepPlacement(item)}
-                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-grab active:cursor-grabbing hover:ring-2 hover:ring-yellow-400/60 overflow-hidden ${
+                          onClick={() => handleItemSelect(item, 'pet')}
+                          className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
+                          } ${
+                            selectedItem?.item.id === item.id && selectedItem?.type === 'pet'
+                              ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
+                              : 'hover:ring-yellow-400/60'
                           }`}
                           style={{ 
                             animationDelay: `${index * 50}ms`,
