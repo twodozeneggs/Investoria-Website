@@ -118,7 +118,8 @@ export default function InteractiveDemo() {
         
         // Log element positions after completion
         setTimeout(() => {
-          const header = document.querySelector('h2');
+          // Target the specific "Try Building Your City" header by ID
+          const header = document.getElementById('city-builder-header');
           const grid = document.querySelector('.aspect-square');
           const section = document.querySelector('section');
           
@@ -160,6 +161,12 @@ export default function InteractiveDemo() {
           // Fix: If header is above viewport, scroll to bring it into view
           if (header) {
             const currentHeaderRect = header.getBoundingClientRect();
+            console.log('🎯 FOUND CORRECT HEADER:', {
+              id: header.id,
+              textContent: header.textContent?.substring(0, 20),
+              top: currentHeaderRect.top
+            });
+            
             if (currentHeaderRect.top < 0) {
               // Calculate where we want the header to be (20px from top)
               const targetPosition = 20;
@@ -180,6 +187,8 @@ export default function InteractiveDemo() {
                 behavior: 'smooth'
               });
             }
+          } else {
+            console.log('❌ HEADER NOT FOUND - ID: city-builder-header');
           }
         }, 100);
       }, 500);
@@ -590,7 +599,7 @@ export default function InteractiveDemo() {
     <section className="max-w-4xl mx-auto px-4 py-20">
       {/* Always visible header - with debug border */}
       <div className={`text-center mb-8 ${currentStep === 'complete' && isMobile ? 'border-4 border-red-500' : ''}`}>
-        <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
+        <h2 id="city-builder-header" className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
         <p className="text-investoria-muted text-lg max-w-2xl mx-auto">
