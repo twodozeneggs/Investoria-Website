@@ -84,10 +84,12 @@ export default function InteractiveDemo() {
     if (filledTiles === 9 && currentStep !== 'complete') {
       // Store current scroll position and prevent any scrolling
       const currentScrollY = window.scrollY;
+      console.log('🎯 COMPLETION START: scrollY =', currentScrollY, 'isMobile =', isMobile);
       setIsTransitioning(true);
       
       // Prevent scrolling during transition
       const preventScroll = (e: Event) => {
+        console.log('🚫 SCROLL PREVENTED: trying to scroll to', window.scrollY, 'keeping at', currentScrollY);
         e.preventDefault();
         window.scrollTo(0, currentScrollY);
       };
@@ -97,6 +99,7 @@ export default function InteractiveDemo() {
       document.body.style.overflow = 'hidden';
       
       const timer = setTimeout(() => {
+        console.log('✅ COMPLETION DONE: setting step to complete, scrollY =', window.scrollY);
         setCurrentStep('complete');
         setIsTransitioning(false);
         
@@ -105,7 +108,14 @@ export default function InteractiveDemo() {
         document.body.style.overflow = '';
         
         // Ensure we're at the right position
+        const finalScrollY = window.scrollY;
+        console.log('🔄 FINAL SCROLL: was at', finalScrollY, 'setting to', currentScrollY);
         window.scrollTo(0, currentScrollY);
+        
+        // Check if it actually worked
+        setTimeout(() => {
+          console.log('🎉 RESULT: final scrollY =', window.scrollY, 'should be', currentScrollY);
+        }, 100);
       }, 500);
       
       return () => {
@@ -407,9 +417,11 @@ export default function InteractiveDemo() {
     
     // Lock scroll position completely
     const currentScrollY = window.scrollY;
+    console.log('🔄 GRID FLIP START: scrollY =', currentScrollY, 'showStockInfo =', showStockInfo);
     
     // Prevent any scrolling during flip
     const preventScroll = () => {
+      console.log('🚫 FLIP SCROLL PREVENTED: keeping at', currentScrollY);
       window.scrollTo(0, currentScrollY);
     };
     
@@ -421,6 +433,7 @@ export default function InteractiveDemo() {
     setTimeout(() => {
       window.removeEventListener('scroll', preventScroll);
       window.scrollTo(0, currentScrollY);
+      console.log('🎉 GRID FLIP END: final scrollY =', window.scrollY);
     }, 100);
   };
 
