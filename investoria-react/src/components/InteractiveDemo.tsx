@@ -375,7 +375,16 @@ export default function InteractiveDemo() {
 
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
+    
+    // Prevent any automatic scrolling by storing current position
+    const currentScrollY = window.scrollY;
+    
     setShowStockInfo(!showStockInfo);
+    
+    // Ensure we stay at the same scroll position
+    requestAnimationFrame(() => {
+      window.scrollTo(0, currentScrollY);
+    });
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
