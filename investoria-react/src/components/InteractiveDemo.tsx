@@ -182,22 +182,29 @@ export default function InteractiveDemo() {
             if (currentHeaderRect.top < 0) {
               console.log('🚀 USING SCROLL INTO VIEW - should be more reliable');
               
-              // Try scrollIntoView with offset to account for the ~28px gap
-              header.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start',
-                inline: 'nearest' 
+              // Calculate a custom scroll position that leaves more space below
+              const headerRect = header.getBoundingClientRect();
+              const viewportHeight = window.innerHeight;
+              const currentScrollY = window.scrollY;
+              
+              // Position header at 25% from top of viewport (instead of 0%)
+              const targetFromTop = viewportHeight * 0.25;
+              const newScrollY = currentScrollY + headerRect.top - targetFromTop;
+              const finalScrollY = Math.max(0, newScrollY);
+              
+              console.log('🎯 CUSTOM POSITIONING:', {
+                headerTop: headerRect.top,
+                viewportHeight: viewportHeight,
+                targetFromTop: targetFromTop,
+                currentScrollY: currentScrollY,
+                newScrollY: newScrollY,
+                finalScrollY: finalScrollY
               });
               
-              // Additional adjustment after scrollIntoView
-              setTimeout(() => {
-                const adjustedScrollY = window.scrollY - 30; // Add 30px buffer
-                window.scrollTo({
-                  top: Math.max(0, adjustedScrollY),
-                  behavior: 'smooth'
-                });
-                console.log('🔧 FINE-TUNE ADJUSTMENT: scrolled up 30px more');
-              }, 100);
+              window.scrollTo({
+                top: finalScrollY,
+                behavior: 'smooth'
+              });
               
               // Log after scroll attempt and monitor for layout shifts
               setTimeout(() => {
@@ -214,10 +221,14 @@ export default function InteractiveDemo() {
                   const currentRect = header.getBoundingClientRect();
                   if (currentRect.top < -10) { // If header goes above viewport again
                     console.log('🔄 LAYOUT SHIFT DETECTED - Re-adjusting scroll');
-                    header.scrollIntoView({ 
-                      behavior: 'smooth', 
-                      block: 'start',
-                      inline: 'nearest' 
+                    // Use same custom positioning as initial scroll
+                    const targetFromTop = window.innerHeight * 0.25;
+                    const newScrollY = window.scrollY + currentRect.top - targetFromTop;
+                    const finalScrollY = Math.max(0, newScrollY);
+                    
+                    window.scrollTo({
+                      top: finalScrollY,
+                      behavior: 'smooth'
                     });
                     shiftCount++;
                     if (shiftCount >= 3) {
