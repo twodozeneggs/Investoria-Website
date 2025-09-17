@@ -189,7 +189,8 @@ export default function InteractiveDemo() {
               // Position header at 25% from top of viewport (instead of 0%)
               const targetFromTop = viewportHeight * 0.25;
               const newScrollY = currentScrollY + currentHeaderRect.top - targetFromTop;
-              const finalScrollY = Math.max(0, newScrollY);
+              // Allow negative scroll values - browser will handle the constraint
+              const finalScrollY = newScrollY;
               
               console.log('🎯 CUSTOM POSITIONING:', {
                 headerTop: currentHeaderRect.top,
@@ -205,40 +206,15 @@ export default function InteractiveDemo() {
                 behavior: 'smooth'
               });
               
-              // Log after scroll attempt and monitor for layout shifts
+              // Log after scroll attempt (no layout shift monitor needed since slideshows are paused)
               setTimeout(() => {
                 const afterScrollRect = header.getBoundingClientRect();
-                console.log('📍 AFTER SCROLL INTO VIEW:', {
+                console.log('📍 AFTER CUSTOM POSITIONING:', {
                   top: afterScrollRect.top,
                   scrollY: window.scrollY,
-                  success: afterScrollRect.top >= 0 && afterScrollRect.top < 100
+                  success: afterScrollRect.top >= 0 && afterScrollRect.top < (viewportHeight * 0.5),
+                  targetRange: `0px to ${Math.round(viewportHeight * 0.5)}px`
                 });
-                
-                // Set up a layout shift monitor for the next 10 seconds
-                let shiftCount = 0;
-                const shiftMonitor = setInterval(() => {
-                  const currentRect = header.getBoundingClientRect();
-                  if (currentRect.top < -10) { // If header goes above viewport again
-                    console.log('🔄 LAYOUT SHIFT DETECTED - Re-adjusting scroll');
-                    // Use same custom positioning as initial scroll
-                    const targetFromTop = window.innerHeight * 0.25;
-                    const newScrollY = window.scrollY + currentRect.top - targetFromTop;
-                    const finalScrollY = Math.max(0, newScrollY);
-                    
-                    window.scrollTo({
-                      top: finalScrollY,
-                      behavior: 'smooth'
-                    });
-                    shiftCount++;
-                    if (shiftCount >= 3) {
-                      console.log('⚠️ Too many shifts, stopping monitor');
-                      clearInterval(shiftMonitor);
-                    }
-                  }
-                }, 2000); // Check every 2 seconds
-                
-                // Clear monitor after 10 seconds
-                setTimeout(() => clearInterval(shiftMonitor), 10000);
               }, 1000);
             }
           } else {
