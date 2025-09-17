@@ -128,16 +128,44 @@ export default function InteractiveDemo() {
         setCurrentStep('complete');
         setIsTransitioning(false);
         
-        // Log element positions after completion
+        // COMPREHENSIVE DEBUGGING - Log all major elements
         setTimeout(() => {
-          // Target the specific "Try Building Your City" header by ID
+          console.log('🔍 === COMPREHENSIVE PAGE ANALYSIS ===');
+          
+          // 1. Viewport info
+          console.log('📱 VIEWPORT:', {
+            width: window.innerWidth,
+            height: window.innerHeight,
+            scrollY: window.scrollY,
+            scrollX: window.scrollX
+          });
+          
+          // 2. Find ALL major sections and headers
+          const allHeaders = document.querySelectorAll('h1, h2, h3');
+          console.log('📋 ALL HEADERS ON PAGE:');
+          allHeaders.forEach((h, index) => {
+            const rect = h.getBoundingClientRect();
+            console.log(`  ${index + 1}. ${h.tagName} "${h.textContent?.substring(0, 30)}..." - top: ${rect.top.toFixed(1)}`);
+          });
+          
+          // 3. Find all sections
+          const allSections = document.querySelectorAll('section');
+          console.log('📄 ALL SECTIONS ON PAGE:');
+          allSections.forEach((s, index) => {
+            const rect = s.getBoundingClientRect();
+            const firstText = s.textContent?.trim().substring(0, 40) || 'No text';
+            console.log(`  ${index + 1}. Section - top: ${rect.top.toFixed(1)} - "${firstText}..."`);
+          });
+          
+          // 4. Our specific elements
           const header = document.getElementById('city-builder-header');
           const grid = document.querySelector('.aspect-square');
-          const section = document.querySelector('section');
           
           if (header) {
             const headerRect = header.getBoundingClientRect();
-            console.log('📍 HEADER POSITION:', {
+            console.log('🎯 OUR TARGET HEADER:', {
+              id: header.id,
+              text: header.textContent,
               top: headerRect.top,
               bottom: headerRect.bottom,
               height: headerRect.height,
@@ -147,7 +175,7 @@ export default function InteractiveDemo() {
           
           if (grid) {
             const gridRect = grid.getBoundingClientRect();
-            console.log('🎮 GRID POSITION:', {
+            console.log('🎮 OUR GRID:', {
               top: gridRect.top,
               bottom: gridRect.bottom,
               height: gridRect.height,
@@ -155,70 +183,30 @@ export default function InteractiveDemo() {
             });
           }
           
-          if (section) {
-            const sectionRect = section.getBoundingClientRect();
-            console.log('📄 SECTION POSITION:', {
-              top: sectionRect.top,
-              bottom: sectionRect.bottom,
-              height: sectionRect.height
+          // 5. Check what's at the very top of viewport
+          const topElement = document.elementFromPoint(window.innerWidth / 2, 10);
+          if (topElement) {
+            console.log('👆 ELEMENT AT TOP OF VIEWPORT:', {
+              tagName: topElement.tagName,
+              className: topElement.className,
+              textContent: topElement.textContent?.substring(0, 50)
             });
           }
           
-          console.log('🔍 FINAL VIEWPORT:', {
-            scrollY: window.scrollY,
-            scrollX: window.scrollX,
-            innerHeight: window.innerHeight
-          });
+          // TEMPORARILY DISABLED - Let's see natural positioning first
+          console.log('⏸️ SCROLL POSITIONING TEMPORARILY DISABLED FOR DEBUGGING');
+          console.log('📝 ANALYSIS: Check the logs above to understand current layout');
+          console.log('🎯 GOAL: Header should be visible with good spacing from top');
           
-          // Fix: If header is above viewport, scroll to bring it into view
           if (header) {
             const currentHeaderRect = header.getBoundingClientRect();
-            console.log('🎯 FOUND CORRECT HEADER:', {
+            console.log('🎯 CURRENT HEADER STATUS:', {
               id: header.id,
-              textContent: header.textContent?.substring(0, 20),
-              top: currentHeaderRect.top
+              text: header.textContent?.substring(0, 20),
+              top: currentHeaderRect.top,
+              isVisible: currentHeaderRect.top >= 0 && currentHeaderRect.top < window.innerHeight,
+              needsAdjustment: currentHeaderRect.top < 0 || currentHeaderRect.top > (window.innerHeight * 0.4)
             });
-            
-            if (currentHeaderRect.top < 0) {
-              console.log('🚀 USING CUSTOM POSITIONING - 25% from top');
-              
-              // Calculate a custom scroll position that leaves more space below
-              const viewportHeight = window.innerHeight;
-              const currentScrollY = window.scrollY;
-              
-              // Position header at 25% from top of viewport (instead of 0%)
-              const targetFromTop = viewportHeight * 0.25;
-              // If header is at -174px and we want it at +190px, we need to scroll up by (174 + 190)
-              const scrollAdjustment = Math.abs(currentHeaderRect.top) + targetFromTop;
-              const finalScrollY = Math.max(0, currentScrollY - scrollAdjustment);
-              
-              console.log('🎯 CUSTOM POSITIONING:', {
-                headerTop: currentHeaderRect.top,
-                viewportHeight: viewportHeight,
-                targetFromTop: targetFromTop,
-                currentScrollY: currentScrollY,
-                scrollAdjustment: scrollAdjustment,
-                finalScrollY: finalScrollY
-              });
-              
-              window.scrollTo({
-                top: finalScrollY,
-                behavior: 'smooth'
-              });
-              
-              // Log after scroll attempt (no layout shift monitor needed since slideshows are paused)
-              setTimeout(() => {
-                const afterScrollRect = header.getBoundingClientRect();
-                console.log('📍 AFTER CUSTOM POSITIONING:', {
-                  top: afterScrollRect.top,
-                  scrollY: window.scrollY,
-                  success: afterScrollRect.top >= 0 && afterScrollRect.top < (viewportHeight * 0.5),
-                  targetRange: `0px to ${Math.round(viewportHeight * 0.5)}px`
-                });
-              }, 1000);
-            }
-          } else {
-            console.log('❌ HEADER NOT FOUND - ID: city-builder-header');
           }
         }, 100);
       }, 500);
