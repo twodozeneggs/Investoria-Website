@@ -64,7 +64,19 @@ export default function InteractiveDemo() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [showStockInfo, setShowStockInfo] = useState(false);
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Auto-complete when grid is completely filled
   useEffect(() => {
@@ -266,7 +278,38 @@ export default function InteractiveDemo() {
 
 
   const handleItemSelect = (item: any, type: TileType) => {
-    setSelectedItem({ item, type });
+    if (isMobile) {
+      setSelectedItem({ item, type });
+    }
+  };
+
+  // Desktop drag handlers
+  const handleDragStart = (e: React.DragEvent, item: any, type: TileType) => {
+    if (!isMobile) {
+      e.dataTransfer.setData('application/json', JSON.stringify({item, type}));
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    if (!isMobile) {
+      e.preventDefault();
+    }
+  };
+
+  const handleDrop = (e: React.DragEvent, gridIndex: number) => {
+    if (!isMobile) {
+      e.preventDefault();
+      try {
+        const data = JSON.parse(e.dataTransfer.getData('application/json'));
+        const tile = grid[gridIndex];
+        
+        if (tile.type === 'empty') {
+          handlePlacement(gridIndex, data.item, data.type);
+        }
+      } catch (error) {
+        console.error('Error handling drop:', error);
+      }
+    }
   };
 
   const handleTileClick = (gridIndex: number) => {
@@ -348,6 +391,8 @@ export default function InteractiveDemo() {
       <div
         key={index}
         onClick={() => handleTileClick(index)}
+        onDragOver={handleDragOver}
+        onDrop={(e) => handleDrop(e, index)}
         className={`
           relative aspect-square
           transition-all duration-300 
@@ -500,13 +545,17 @@ export default function InteractiveDemo() {
                 <p className="text-investoria-muted text-sm mb-4">
                   {selectedItem && selectedItem.type === 'building' 
                     ? 'Now click the center tile to place your building!' 
-                    : 'Select a building, then click the center tile to place it'}
+                    : isMobile 
+                      ? 'Tap a building to select, then tap the center tile to place'
+                      : 'Drag a building to the center tile to place your investment'}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
                   {stockBuildings.map((building) => (
                     <div
                       key={building.id}
                       onClick={() => handleItemSelect(building, 'building')}
+                      draggable={!isMobile}
+                      onDragStart={(e) => handleDragStart(e, building, 'building')}
                       className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none ${
                         selectedItem?.item.id === building.id && selectedItem?.type === 'building'
                           ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
@@ -568,6 +617,8 @@ export default function InteractiveDemo() {
                     <div
                       key={item.id}
                       onClick={() => handleItemSelect(item, 'terrain')}
+                      draggable={!isMobile}
+                      onDragStart={(e) => handleDragStart(e, item, 'terrain')}
                       className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 select-none relative ${
                         selectedItem?.item.id === item.id && selectedItem?.type === 'terrain'
                           ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
@@ -590,6 +641,8 @@ export default function InteractiveDemo() {
                     <div
                       key={pet.id}
                       onClick={() => handleItemSelect(pet, 'pet')}
+                      draggable={!isMobile}
+                      onDragStart={(e) => handleDragStart(e, pet, 'pet')}
                       className={`bg-green-600/30 rounded-lg p-2 cursor-pointer hover:bg-green-600/50 active:bg-green-600/70 transition-all duration-200 border hover:scale-105 active:scale-95 text-center select-none relative ${
                         selectedItem?.item.id === pet.id && selectedItem?.type === 'pet'
                           ? 'border-gold-400 ring-2 ring-gold-400/50 bg-gold-400/20' 
@@ -687,8 +740,10 @@ export default function InteractiveDemo() {
                   {stockBuildings.map((item) => (
                     <div
                       key={item.id}
-                    onClick={() => handleItemSelect(item, 'building')}
-                    className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
+                      onClick={() => handleItemSelect(item, 'building')}
+                      draggable={!isMobile}
+                      onDragStart={(e) => handleDragStart(e, item, 'building')}
+                      className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                       selectedItem?.item.id === item.id && selectedItem?.type === 'building'
                         ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
                         : 'hover:ring-gold-400/30'
@@ -765,6 +820,8 @@ export default function InteractiveDemo() {
                         <div
                           key={item.id}
                           onClick={() => handleItemSelect(item, 'terrain')}
+                          draggable={!isMobile}
+                          onDragStart={(e) => handleDragStart(e, item, 'terrain')}
                           className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
                           } ${
@@ -789,6 +846,8 @@ export default function InteractiveDemo() {
                         <div
                           key={item.id}
                           onClick={() => handleItemSelect(item, 'pet')}
+                          draggable={!isMobile}
+                          onDragStart={(e) => handleDragStart(e, item, 'pet')}
                           className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                             !isTransitioning ? 'animate-fade-in' : ''
                           } ${
