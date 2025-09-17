@@ -32,7 +32,7 @@ export default function ProductShowcase() {
       screenshot: "./charity-screenshot.png",
       title: "Give Back While You Grow",
       subtitle: "Impact investing simplified", 
-      description: "Build not just wealth, but meaningful positive impact that lasts. See how your charitable contributions and impact investments are making a real, measurable difference in your local community and beyond.",
+      description: "Build not just wealth, but meaningful positive impact that lasts. See how your charitable contributions and impact investments to make a difference in your local community and beyond.",
       features: [
         { text: "Charitable giving tracking", icon: "heart" },
         { text: "Impact measurement", icon: "target" },

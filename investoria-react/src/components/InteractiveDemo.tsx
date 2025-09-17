@@ -706,7 +706,7 @@ export default function InteractiveDemo() {
                       <img 
                         src={item.emoji} 
                         alt={item.name} 
-                        className="w-full h-6 object-contain pointer-events-none" 
+                        className="w-full h-8 object-contain pointer-events-none" 
                       />
                       {selectedItem?.item.id === item.id && selectedItem?.type === 'terrain' && (
                         <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
@@ -730,7 +730,7 @@ export default function InteractiveDemo() {
                       <img 
                         src={pet.emoji} 
                         alt={pet.name} 
-                        className="w-full h-6 object-contain pointer-events-none" 
+                        className="w-full h-8 object-contain pointer-events-none" 
                       />
                       {selectedItem?.item.id === pet.id && selectedItem?.type === 'pet' && (
                         <div className="absolute -top-2 -right-2 bg-gold-400 text-green-900 text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
