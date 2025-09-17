@@ -1071,18 +1071,20 @@ export default function InteractiveDemo() {
                     
                     const building = buildingTile.data as StockBuilding;
                     return (
-                      <div className="text-center text-white h-full flex flex-col justify-center">
-                        <div className="mb-4">
+                      <div className="text-white h-full flex flex-col justify-start py-2 px-3 overflow-y-auto">
+                        {/* Header Section */}
+                        <div className="text-center mb-3">
                           <img 
                             src={building.emoji} 
                             alt={building.name} 
-                            className="w-16 h-16 mx-auto mb-2 rounded-lg bg-green-600/30 p-2" 
+                            className="w-12 h-12 mx-auto mb-1 rounded-lg bg-green-600/30 p-1" 
                           />
-                          <div className="text-2xl font-bold text-gold-400">{building.symbol}</div>
-                          <div className="text-lg text-green-300">{building.name}</div>
+                          <div className="text-xl font-bold text-gold-400">{building.symbol}</div>
+                          <div className="text-sm text-green-300">{building.name} Sector</div>
                         </div>
-                        
-                        <div className="space-y-2 text-sm">
+
+                        {/* Performance Metrics */}
+                        <div className="space-y-1 text-xs mb-3">
                           <div className="flex justify-between">
                             <span className="text-green-200">Stock Price:</span>
                             <span className="text-white font-bold">{building.price}</span>
@@ -1099,10 +1101,51 @@ export default function InteractiveDemo() {
                             <span className="text-green-200">Current Value:</span>
                             <span className="text-green-400 font-bold">{building.currentValue}</span>
                           </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">Market Cap:</span>
+                            <span className="text-white font-bold">{building.sectorInfo.marketCap}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-green-200">YTD Return:</span>
+                            <span className="text-green-400 font-bold">{building.sectorInfo.ytdReturn}</span>
+                          </div>
                         </div>
-                        
-                        <div className="mt-4 text-xs text-green-300">
-                          Tap to flip back to city
+
+                        {/* Sector Description */}
+                        <div className="mb-3">
+                          <div className="text-xs font-semibold text-gold-400 mb-1">About This Sector</div>
+                          <p className="text-xs text-green-100 leading-relaxed">{building.sectorInfo.description}</p>
+                        </div>
+
+                        {/* Top Stocks */}
+                        <div className="mb-3">
+                          <div className="text-xs font-semibold text-gold-400 mb-1">Top Holdings</div>
+                          <div className="space-y-1">
+                            {building.sectorInfo.topStocks.slice(0, 3).map((stock, index) => (
+                              <div key={index} className="flex justify-between text-xs">
+                                <span className="text-green-200 truncate flex-1">{stock.name}</span>
+                                <span className="text-white font-medium ml-2">{stock.price}</span>
+                                <span className="text-green-400 text-xs ml-1">{stock.change}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Key Insights */}
+                        <div className="mb-2">
+                          <div className="text-xs font-semibold text-gold-400 mb-1">Key Insights</div>
+                          <div className="space-y-1">
+                            {building.sectorInfo.insights.slice(0, 2).map((insight, index) => (
+                              <div key={index} className="text-xs text-green-100 leading-relaxed">
+                                • <span className="font-medium">{insight.title}:</span> {insight.content}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="text-center mt-auto pt-2">
+                          <div className="text-xs text-green-300">Tap to flip back to city</div>
                         </div>
                       </div>
                     );
