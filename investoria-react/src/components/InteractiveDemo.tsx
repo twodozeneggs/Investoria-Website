@@ -510,9 +510,9 @@ export default function InteractiveDemo() {
 
 
   return (
-    <section className={`max-w-4xl mx-auto px-4 ${currentStep === 'complete' && isMobile ? 'py-12' : 'py-20'}`}>
+    <section className="max-w-4xl mx-auto px-4 py-20">
       {/* Always visible header */}
-      <div className={`text-center ${currentStep === 'complete' && isMobile ? 'mb-4' : 'mb-8'}`}>
+      <div className="text-center mb-8">
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
@@ -523,7 +523,7 @@ export default function InteractiveDemo() {
       </div>
 
       {/* Mobile-Optimized Layout */}
-      <div className={`space-y-6 ${currentStep === 'complete' && isMobile ? 'mt-4' : ''}`}>
+      <div className="space-y-6">
         {/* Mobile: Compact Instructions at Top */}
         {currentStep !== 'complete' && (
           <div className="lg:hidden">
@@ -697,12 +697,12 @@ export default function InteractiveDemo() {
         {/* Desktop: Side-by-Side Layout */}
         <div className="hidden lg:grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
           {/* Left Side - Desktop Instructions */}
-          <div className="relative">
-            {/* Background decoration */}
-            <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
-            <div className="absolute top-1/2 -left-8 w-24 h-24 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
-            
-            <div className="relative bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] h-[500px] overflow-hidden">
+        <div className="relative">
+          {/* Background decoration */}
+          <div className="absolute -top-4 -right-4 w-32 h-32 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-xl pointer-events-none"></div>
+          <div className="absolute top-1/2 -left-8 w-24 h-24 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl pointer-events-none"></div>
+          
+          <div className="relative bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-3xl p-6 shadow-[0_20px_50px_rgba(0,0,0,0.4)] h-[500px] overflow-hidden">
           {/* Step Progress Indicator - Hidden when complete */}
           {currentStep !== 'complete' && (
             <div className="flex justify-center mb-8">
@@ -757,7 +757,7 @@ export default function InteractiveDemo() {
                       key={item.id}
                       onClick={() => handleItemSelect(item, 'building')}
                       draggable={!isMobile}
-                      onDragStart={(e) => handleDragStart(e, item, 'building')}
+                    onDragStart={(e) => handleDragStart(e, item, 'building')}
                       className={`aspect-square rounded-xl bg-transparent hover:bg-white/20 hover:scale-105 transition-all duration-200 flex flex-col items-center justify-center gap-1 group p-2 cursor-pointer hover:ring-2 overflow-hidden ${
                       selectedItem?.item.id === item.id && selectedItem?.type === 'building'
                         ? 'ring-2 ring-gold-400/50 bg-gold-400/20' 
@@ -1078,15 +1078,15 @@ export default function InteractiveDemo() {
         </div>
 
           {/* Right Side - Desktop Interactive Grid */}
-          <div className="flex items-center justify-center h-[500px]">
-            <div className="grid grid-cols-3 gap-0 w-full max-w-lg aspect-square rounded-lg overflow-hidden shadow-lg">
-              {grid.map((tile, index) => renderGridTile(tile, index))}
-            </div>
+        <div className="flex items-center justify-center h-[500px]">
+          <div className="grid grid-cols-3 gap-0 w-full max-w-lg aspect-square rounded-lg overflow-hidden shadow-lg">
+            {grid.map((tile, index) => renderGridTile(tile, index))}
           </div>
         </div>
-
+      </div>
+      
         {/* Mobile: Interactive Grid */}
-        <div className="lg:hidden flex justify-center">
+        <div className={`lg:hidden flex justify-center ${currentStep === 'complete' && isMobile ? 'mt-8' : ''}`}>
           <div className="w-full max-w-sm">
             <div 
               className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20"
