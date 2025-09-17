@@ -26,7 +26,7 @@ export default function Hero() {
                   });
                 }
               }}
-              className="inline-flex items-center rounded-xl bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-300 hover:to-gold-400 text-green-1000 font-bold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 transform hover:-translate-y-1 shadow-2xl hover:shadow-gold-400/25 text-base sm:text-lg ring-2 ring-gold-400/30 w-full sm:w-auto text-center"
+              className="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-gold-400 to-gold-500 hover:from-gold-300 hover:to-gold-400 text-green-1000 font-bold px-6 sm:px-8 py-3 sm:py-4 transition-all duration-200 transform hover:-translate-y-1 shadow-2xl hover:shadow-gold-400/25 text-base sm:text-lg ring-2 ring-gold-400/30 w-auto max-w-xs mx-auto sm:mx-0 sm:w-auto"
             >
               Join the Waitlist
             </button>

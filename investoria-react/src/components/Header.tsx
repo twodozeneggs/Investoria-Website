@@ -1,7 +1,7 @@
 
 export default function Header() {
   return (
-    <header className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between relative z-20">
+    <header className="max-w-6xl mx-auto px-4 py-6 flex items-center justify-between sm:justify-between justify-center relative z-20">
       <div className="flex items-center gap-3">
         <span className="text-2xl tracking-tight" style={{ 
           fontFamily: 'Cinzel Decorative, serif',

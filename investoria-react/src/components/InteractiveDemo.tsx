@@ -128,109 +128,33 @@ export default function InteractiveDemo() {
         setCurrentStep('complete');
         setIsTransitioning(false);
         
-        // COMPREHENSIVE DEBUGGING - Log all major elements
+        // HYBRID APPROACH: Layout preservation + minimal padding for perfect positioning
         setTimeout(() => {
-          console.log('🔍 === COMPREHENSIVE PAGE ANALYSIS ===');
+          console.log('✅ LAYOUT FIX: Adding spacing for mobile completion');
           
-          // 1. Viewport info
-          console.log('📱 VIEWPORT:', {
-            width: window.innerWidth,
-            height: window.innerHeight,
-            scrollY: window.scrollY,
-            scrollX: window.scrollX
-          });
-          
-          // 2. Find ALL major sections and headers
-          const allHeaders = document.querySelectorAll('h1, h2, h3');
-          console.log('📋 ALL HEADERS ON PAGE:');
-          allHeaders.forEach((h, index) => {
-            const rect = h.getBoundingClientRect();
-            console.log(`  ${index + 1}. ${h.tagName} "${h.textContent?.substring(0, 30)}..." - top: ${rect.top.toFixed(1)}`);
-          });
-          
-          // 3. Find all sections
-          const allSections = document.querySelectorAll('section');
-          console.log('📄 ALL SECTIONS ON PAGE:');
-          allSections.forEach((s, index) => {
-            const rect = s.getBoundingClientRect();
-            const firstText = s.textContent?.trim().substring(0, 40) || 'No text';
-            console.log(`  ${index + 1}. Section - top: ${rect.top.toFixed(1)} - "${firstText}..."`);
-          });
-          
-          // 4. Our specific elements
           const header = document.getElementById('city-builder-header');
-          const grid = document.querySelector('.aspect-square');
-          
-          if (header) {
+          if (header && isMobile) {
             const headerRect = header.getBoundingClientRect();
-            console.log('🎯 OUR TARGET HEADER:', {
-              id: header.id,
-              text: header.textContent,
+            console.log('📱 Header position before layout fix:', {
               top: headerRect.top,
-              bottom: headerRect.bottom,
-              height: headerRect.height,
-              visible: headerRect.top >= 0 && headerRect.top < window.innerHeight
-            });
-          }
-          
-          if (grid) {
-            const gridRect = grid.getBoundingClientRect();
-            console.log('🎮 OUR GRID:', {
-              top: gridRect.top,
-              bottom: gridRect.bottom,
-              height: gridRect.height,
-              visible: gridRect.top >= 0 && gridRect.top < window.innerHeight
-            });
-          }
-          
-          // 5. Check what's at the very top of viewport
-          const topElement = document.elementFromPoint(window.innerWidth / 2, 10);
-          if (topElement) {
-            console.log('👆 ELEMENT AT TOP OF VIEWPORT:', {
-              tagName: topElement.tagName,
-              className: topElement.className,
-              textContent: topElement.textContent?.substring(0, 50)
-            });
-          }
-          
-          // SIMPLE TARGETED FIX based on debug data
-          if (header) {
-            const currentHeaderRect = header.getBoundingClientRect();
-            console.log('🎯 CURRENT HEADER STATUS:', {
-              id: header.id,
-              text: header.textContent?.substring(0, 20),
-              top: currentHeaderRect.top,
-              isVisible: currentHeaderRect.top >= 0 && currentHeaderRect.top < window.innerHeight,
-              needsAdjustment: currentHeaderRect.top < 0 || currentHeaderRect.top > (window.innerHeight * 0.4)
+              scrollY: window.scrollY
             });
             
-            // If header is above viewport, bring it down to ~80px from top (good spacing)
-            if (currentHeaderRect.top < 0) {
-              const targetPosition = 80; // 80px from top of viewport
-              const scrollAdjustment = Math.abs(currentHeaderRect.top) - targetPosition;
+            // Add top padding to the section to push content down
+            const section = header.closest('section');
+            if (section) {
+              section.style.paddingTop = '50px'; // Minimal padding since we're preserving layout height
+              console.log('✅ Added extra padding to section');
               
-              console.log('🚀 SIMPLE SCROLL FIX:', {
-                headerCurrentTop: currentHeaderRect.top,
-                targetPosition: targetPosition,
-                scrollAdjustment: scrollAdjustment,
-                currentScrollY: window.scrollY,
-                newScrollY: window.scrollY - scrollAdjustment
-              });
-              
-              window.scrollTo({
-                top: Math.max(0, window.scrollY - scrollAdjustment),
-                behavior: 'smooth'
-              });
-              
-              // Verify after scroll
+              // Verify the fix
               setTimeout(() => {
-                const afterRect = header.getBoundingClientRect();
-                console.log('✅ AFTER SIMPLE SCROLL:', {
-                  headerTop: afterRect.top,
-                  success: afterRect.top >= 60 && afterRect.top <= 100,
-                  scrollY: window.scrollY
+                const newRect = header.getBoundingClientRect();
+                console.log('🎯 Header position after layout fix:', {
+                  top: newRect.top,
+                  isVisible: newRect.top >= 0 && newRect.top < window.innerHeight,
+                  success: newRect.top >= 80 && newRect.top <= 200
                 });
-              }, 1000);
+              }, 100);
             }
           }
         }, 100);
@@ -639,9 +563,9 @@ export default function InteractiveDemo() {
 
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-20">
-      {/* Always visible header - with debug border */}
-      <div className={`text-center mb-8 ${currentStep === 'complete' && isMobile ? 'border-4 border-red-500' : ''}`}>
+    <section className="max-w-4xl mx-auto px-4 py-20 lg:py-20 md:py-12 sm:py-8">
+      {/* Always visible header */}
+      <div className="text-center mb-8">
         <h2 id="city-builder-header" className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
           Try Building Your City
         </h2>
@@ -654,7 +578,7 @@ export default function InteractiveDemo() {
       {/* Mobile-Optimized Layout */}
       <div className="space-y-6">
         {/* Mobile: Compact Instructions at Top */}
-        {currentStep !== 'complete' && (
+        {currentStep !== 'complete' ? (
           <div className="lg:hidden">
             <div className="bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-2xl p-4 shadow-lg">
             {/* Mobile Progress Indicator */}
@@ -819,6 +743,20 @@ export default function InteractiveDemo() {
               </div>
             )}
 
+            </div>
+          </div>
+        ) : (
+          /* Mobile: Completion State - Same height as instructions to prevent layout collapse */
+          <div className="lg:hidden">
+            <div className="bg-gradient-to-br from-green-800/30 via-green-900/20 to-green-1000/30 backdrop-blur-md rounded-2xl p-4 shadow-lg">
+              <div className="text-center space-y-2">
+                <div className="text-2xl">✨</div>
+                <div className="text-gold-400 font-bold text-lg">Great Job!</div>
+                <div className="text-investoria-muted text-sm leading-snug">
+                  You've successfully filled out the grid!<br/>
+                  Press "View Stock Info" to learn more about the building you picked.
+                </div>
+              </div>
             </div>
           </div>
         )}
@@ -1218,7 +1156,7 @@ export default function InteractiveDemo() {
         <div className={`lg:hidden flex justify-center ${currentStep === 'complete' && isMobile ? 'mt-8' : ''}`}>
           <div className="w-full max-w-sm">
             <div 
-              className={`relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 ${currentStep === 'complete' ? 'border-blue-500 border-4' : 'border-gold-400/20'}`}
+              className="relative aspect-square rounded-xl overflow-hidden shadow-xl border-2 border-gold-400/20"
               style={{ perspective: '1000px' }}
             >
               {/* Grid Container with Flip Animation */}
@@ -1359,13 +1297,19 @@ export default function InteractiveDemo() {
         {currentStep === 'complete' && (
           <button
             onClick={handleGridFlip}
-            className="group px-6 py-3 bg-gradient-to-r from-green-400/20 to-green-500/20 hover:from-green-400/30 hover:to-green-500/30 text-green-400 rounded-xl transition-all duration-300 font-semibold border border-green-400/30 hover:border-green-400/50 hover:shadow-lg hover:shadow-green-400/10 hover:scale-105 animate-fade-in"
+            className="group relative px-6 py-3 bg-white/5 backdrop-blur-md hover:bg-white/10 text-gold-400 rounded-lg transition-all duration-300 font-semibold border border-gold-400/30 hover:border-gold-400/50 hover:shadow-xl hover:shadow-gold-400/10 hover:-translate-y-0.5 animate-fade-in overflow-hidden"
           >
-            <span className="flex items-center gap-2">
-              <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+            {/* Animated gradient overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-gold-400/10 via-gold-500/5 to-gold-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <span className="relative flex items-center gap-2">
+              <svg className="w-4 h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
-              {showStockInfo ? 'View City' : 'View Stock Info'}
+              {showStockInfo ? 'Back to City' : 'View Stock Info'}
+              <svg className="w-3 h-3 group-hover:translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
             </span>
           </button>
         )}
