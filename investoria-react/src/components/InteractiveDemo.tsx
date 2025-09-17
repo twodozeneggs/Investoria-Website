@@ -333,8 +333,10 @@ export default function InteractiveDemo() {
   };
 
   const handleGridFlip = () => {
+    console.log('handleGridFlip called, currentStep:', currentStep);
     if (currentStep !== 'complete') return;
     
+    console.log('Flipping grid, showStockInfo:', showStockInfo);
     setIsFlipping(true);
     setTimeout(() => {
       setShowStockInfo(!showStockInfo);
@@ -1042,11 +1044,14 @@ export default function InteractiveDemo() {
                   className="absolute inset-0 w-full h-full backface-hidden"
                   style={{ backfaceVisibility: 'hidden' }}
                 >
-                  <div className="grid grid-cols-3 gap-0 w-full h-full">
+                  <div 
+                    className="grid grid-cols-3 gap-0 w-full h-full"
+                    style={{ pointerEvents: currentStep === 'complete' ? 'none' : 'auto' }}
+                  >
                     {grid.map((tile, index) => renderGridTile(tile, index))}
                   </div>
                   {currentStep === 'complete' && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                       <div className="text-center text-white">
                         <div className="text-lg font-bold mb-1">📊 View Stock Info</div>
                         <div className="text-sm">Tap to flip</div>
