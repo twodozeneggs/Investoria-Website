@@ -82,7 +82,25 @@ export default function InteractiveDemo() {
   useEffect(() => {
     const filledTiles = grid.filter(tile => tile.type !== 'empty').length;
     if (filledTiles === 9 && currentStep !== 'complete') {
-      const timer = setTimeout(() => setCurrentStep('complete'), 500);
+      // Store current scroll position before completion transition
+      const currentScrollY = window.scrollY;
+      setIsTransitioning(true);
+      
+      const timer = setTimeout(() => {
+        setCurrentStep('complete');
+        setIsTransitioning(false);
+        
+        // Restore scroll position after state change with multiple attempts
+        const restoreScroll = () => {
+          window.scrollTo(0, currentScrollY);
+          // Double-check after a short delay
+          setTimeout(() => {
+            window.scrollTo(0, currentScrollY);
+          }, 50);
+        };
+        
+        requestAnimationFrame(restoreScroll);
+      }, 500);
       return () => clearTimeout(timer);
     }
   }, [grid, currentStep]);
