@@ -82,26 +82,37 @@ export default function InteractiveDemo() {
   useEffect(() => {
     const filledTiles = grid.filter(tile => tile.type !== 'empty').length;
     if (filledTiles === 9 && currentStep !== 'complete') {
-      // Store current scroll position before completion transition
+      // Store current scroll position and prevent any scrolling
       const currentScrollY = window.scrollY;
       setIsTransitioning(true);
+      
+      // Prevent scrolling during transition
+      const preventScroll = (e: Event) => {
+        e.preventDefault();
+        window.scrollTo(0, currentScrollY);
+      };
+      
+      // Add scroll prevention
+      window.addEventListener('scroll', preventScroll, { passive: false });
+      document.body.style.overflow = 'hidden';
       
       const timer = setTimeout(() => {
         setCurrentStep('complete');
         setIsTransitioning(false);
         
-        // Restore scroll position after state change with multiple attempts
-        const restoreScroll = () => {
-          window.scrollTo(0, currentScrollY);
-          // Double-check after a short delay
-          setTimeout(() => {
-            window.scrollTo(0, currentScrollY);
-          }, 50);
-        };
+        // Remove scroll prevention
+        window.removeEventListener('scroll', preventScroll);
+        document.body.style.overflow = '';
         
-        requestAnimationFrame(restoreScroll);
+        // Ensure we're at the right position
+        window.scrollTo(0, currentScrollY);
       }, 500);
-      return () => clearTimeout(timer);
+      
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener('scroll', preventScroll);
+        document.body.style.overflow = '';
+      };
     }
   }, [grid, currentStep]);
 
@@ -394,15 +405,23 @@ export default function InteractiveDemo() {
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
     
-    // Prevent any automatic scrolling by storing current position
+    // Lock scroll position completely
     const currentScrollY = window.scrollY;
+    
+    // Prevent any scrolling during flip
+    const preventScroll = () => {
+      window.scrollTo(0, currentScrollY);
+    };
+    
+    window.addEventListener('scroll', preventScroll);
     
     setShowStockInfo(!showStockInfo);
     
-    // Ensure we stay at the same scroll position
-    requestAnimationFrame(() => {
+    // Remove scroll prevention after a short delay
+    setTimeout(() => {
+      window.removeEventListener('scroll', preventScroll);
       window.scrollTo(0, currentScrollY);
-    });
+    }, 100);
   };
 
   const renderGridTile = (tile: GridTile, index: number) => {
