@@ -193,11 +193,7 @@ export default function InteractiveDemo() {
             });
           }
           
-          // TEMPORARILY DISABLED - Let's see natural positioning first
-          console.log('⏸️ SCROLL POSITIONING TEMPORARILY DISABLED FOR DEBUGGING');
-          console.log('📝 ANALYSIS: Check the logs above to understand current layout');
-          console.log('🎯 GOAL: Header should be visible with good spacing from top');
-          
+          // SIMPLE TARGETED FIX based on debug data
           if (header) {
             const currentHeaderRect = header.getBoundingClientRect();
             console.log('🎯 CURRENT HEADER STATUS:', {
@@ -207,6 +203,35 @@ export default function InteractiveDemo() {
               isVisible: currentHeaderRect.top >= 0 && currentHeaderRect.top < window.innerHeight,
               needsAdjustment: currentHeaderRect.top < 0 || currentHeaderRect.top > (window.innerHeight * 0.4)
             });
+            
+            // If header is above viewport, bring it down to ~80px from top (good spacing)
+            if (currentHeaderRect.top < 0) {
+              const targetPosition = 80; // 80px from top of viewport
+              const scrollAdjustment = Math.abs(currentHeaderRect.top) - targetPosition;
+              
+              console.log('🚀 SIMPLE SCROLL FIX:', {
+                headerCurrentTop: currentHeaderRect.top,
+                targetPosition: targetPosition,
+                scrollAdjustment: scrollAdjustment,
+                currentScrollY: window.scrollY,
+                newScrollY: window.scrollY - scrollAdjustment
+              });
+              
+              window.scrollTo({
+                top: Math.max(0, window.scrollY - scrollAdjustment),
+                behavior: 'smooth'
+              });
+              
+              // Verify after scroll
+              setTimeout(() => {
+                const afterRect = header.getBoundingClientRect();
+                console.log('✅ AFTER SIMPLE SCROLL:', {
+                  headerTop: afterRect.top,
+                  success: afterRect.top >= 60 && afterRect.top <= 100,
+                  scrollY: window.scrollY
+                });
+              }, 1000);
+            }
           }
         }, 100);
       }, 500);
