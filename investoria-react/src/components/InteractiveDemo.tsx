@@ -557,7 +557,7 @@ export default function InteractiveDemo() {
 
 
   return (
-    <section className="relative">
+    <section id="demo" className="relative">
       {/* Subtle alternating section band */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/8 via-black/12 to-black/8 pointer-events-none"></div>
       <div className="max-w-4xl mx-auto px-4 py-20 lg:py-20 md:py-12 sm:py-8 relative">

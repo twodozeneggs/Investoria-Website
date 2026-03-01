@@ -151,6 +151,7 @@ export default function ProductShowcase() {
 
   return (
     <section 
+      id="showcase"
       ref={sectionRef}
       className={`relative transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
