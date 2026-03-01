@@ -1,10 +1,8 @@
-import Skyline from './Skyline';
-
 export default function Hero() {
   return (
     <section className="relative min-h-[88vh] xl:min-h-[78vh] 2xl:min-h-[68vh] flex items-center overflow-hidden">
 
-      <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 2xl:px-8 py-8 sm:py-12 pb-20 grid lg:grid-cols-2 gap-8 lg:gap-12 2xl:gap-20 items-center relative z-10">
+      <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 2xl:px-8 py-8 sm:py-12 grid lg:grid-cols-2 gap-8 lg:gap-12 2xl:gap-20 items-center relative z-10">
         <div className="text-center lg:text-left">
           <h1 className="font-cinzel font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl tracking-tight leading-[1.1] animate-fade-in">
             <span className="text-gold-400 drop-shadow-lg">Build your city.</span>
@@ -63,8 +61,6 @@ export default function Hero() {
           />
         </div>
       </div>
-
-      <Skyline />
     </section>
   );
 }
