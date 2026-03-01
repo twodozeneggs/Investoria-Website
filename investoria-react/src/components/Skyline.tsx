@@ -2,24 +2,26 @@
 export default function Skyline() {
   return (
     <div className="absolute left-0 right-0 bottom-0 h-56 overflow-hidden pointer-events-none">
-      {/* Skyline SVG - adapted from your original design */}
+      {/* Skyline SVG */}
       <svg 
-        className="absolute bottom-0 w-full h-full opacity-90" 
+        className="absolute bottom-0 w-full h-full" 
         viewBox="0 0 1440 220" 
         preserveAspectRatio="none"
       >
         <defs>
           <linearGradient id="cityGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--green-800)" />
-            <stop offset="100%" stopColor="var(--green-900)" />
+            <stop offset="0%" stopColor="rgba(11,42,21,0)" />
+            <stop offset="60%" stopColor="rgba(11,42,21,0.7)" />
+            <stop offset="100%" stopColor="rgba(11,42,21,0.95)" />
+          </linearGradient>
+          <linearGradient id="buildingFade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0B2A15" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#0B2A15" stopOpacity="0.95" />
           </linearGradient>
         </defs>
         
-        {/* Background fill */}
-        <rect width="1440" height="220" fill="url(#cityGradient)" />
-        
-        {/* City buildings - using your original coordinates */}
-        <g fill="var(--green-1000)">
+        {/* City buildings */}
+        <g fill="url(#buildingFade)">
           <rect x="40" y="60" width="80" height="160" />
           <rect x="140" y="90" width="60" height="130" />
           <rect x="220" y="40" width="90" height="180" />
@@ -34,14 +36,38 @@ export default function Skyline() {
           <rect x="1080" y="105" width="70" height="115" />
           <rect x="1170" y="50" width="95" height="170" />
           <rect x="1280" y="90" width="70" height="130" />
+          {/* Extra buildings for wide screens */}
+          <rect x="1380" y="75" width="60" height="145" />
         </g>
-        
-        {/* Building highlights for premium effect */}
-        <g fill="var(--gold-600)" opacity="0.3">
-          <rect x="220" y="40" width="4" height="180" />
-          <rect x="800" y="55" width="4" height="165" />
-          <rect x="1170" y="50" width="4" height="170" />
+
+        {/* Tiny windows - warm gold glints */}
+        <g fill="#F1B23E" opacity="0.35">
+          <rect x="55" y="80" width="6" height="5" />
+          <rect x="72" y="80" width="6" height="5" />
+          <rect x="55" y="100" width="6" height="5" />
+          <rect x="72" y="100" width="6" height="5" />
+          <rect x="235" y="60" width="6" height="5" />
+          <rect x="252" y="60" width="6" height="5" />
+          <rect x="235" y="80" width="6" height="5" />
+          <rect x="610" y="95" width="6" height="5" />
+          <rect x="630" y="95" width="6" height="5" />
+          <rect x="815" y="70" width="6" height="5" />
+          <rect x="835" y="70" width="6" height="5" />
+          <rect x="815" y="90" width="6" height="5" />
+          <rect x="1185" y="65" width="6" height="5" />
+          <rect x="1205" y="65" width="6" height="5" />
+          <rect x="1185" y="85" width="6" height="5" />
         </g>
+
+        {/* Gold accent lines on tall buildings */}
+        <g fill="#C18417" opacity="0.4">
+          <rect x="220" y="40" width="3" height="180" />
+          <rect x="800" y="55" width="3" height="165" />
+          <rect x="1170" y="50" width="3" height="170" />
+        </g>
+
+        {/* Gradient overlay to fade skyline into background */}
+        <rect width="1440" height="220" fill="url(#cityGradient)" />
       </svg>
 
       {/* Animated construction crane */}

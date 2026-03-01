@@ -152,10 +152,13 @@ export default function ProductShowcase() {
   return (
     <section 
       ref={sectionRef}
-      className={`max-w-7xl mx-auto px-4 py-20 lg:py-20 md:py-16 sm:py-12 transition-all duration-1000 ${
+      className={`relative transition-all duration-1000 ${
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
+      {/* Subtle section band for visual separation */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/10 to-transparent pointer-events-none"></div>
+      <div className="max-w-7xl mx-auto px-4 py-20 lg:py-20 md:py-16 sm:py-12 relative">
       <div className="relative grid lg:grid-cols-2 gap-12 items-center">
         {/* iPhone Screenshots - Left Side */}
         <div className="flex justify-center lg:justify-end">
@@ -245,6 +248,7 @@ export default function ProductShowcase() {
             ))}
           </div>
         </div>
+      </div>
       </div>
     </section>
   );

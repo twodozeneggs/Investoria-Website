@@ -557,7 +557,10 @@ export default function InteractiveDemo() {
 
 
   return (
-    <section className="max-w-4xl mx-auto px-4 py-20 lg:py-20 md:py-12 sm:py-8">
+    <section className="relative">
+      {/* Subtle alternating section band */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black/8 via-black/12 to-black/8 pointer-events-none"></div>
+      <div className="max-w-4xl mx-auto px-4 py-20 lg:py-20 md:py-12 sm:py-8 relative">
       {/* Always visible header */}
       <div className="text-center mb-8">
         <h2 id="city-builder-header" className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
@@ -1288,6 +1291,7 @@ export default function InteractiveDemo() {
             Start Over
           </span>
         </button>
+      </div>
       </div>
     </section>
   );

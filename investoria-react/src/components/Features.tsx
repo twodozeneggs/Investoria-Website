@@ -68,7 +68,7 @@ export default function Features() {
         isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 2xl:px-8">
       {/* Section header */}
       <div className="text-center mb-16">
         <h2 className="font-cinzel font-bold text-3xl sm:text-4xl text-gold-400 mb-4">
