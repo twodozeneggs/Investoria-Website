@@ -4,14 +4,21 @@ export default function Hero() {
 
       <div className="max-w-6xl 2xl:max-w-7xl mx-auto px-4 2xl:px-8 py-8 sm:py-12 grid lg:grid-cols-2 gap-8 lg:gap-12 2xl:gap-20 items-center relative z-10">
         <div className="text-center lg:text-left">
-          <h1 className="font-cinzel font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl tracking-tight leading-[1.1] animate-fade-in">
+          {/* Honest pre-launch status pill */}
+          <span className="inline-flex items-center gap-2 rounded-full bg-gold-400/10 px-3 py-1 text-xs font-semibold tracking-wide text-gold-300 ring-1 ring-gold-400/30 animate-fade-in">
+            <span className="h-1.5 w-1.5 rounded-full bg-gold-400" />
+            Pre-launch · Join the waitlist
+          </span>
+
+          <h1 className="mt-4 font-cinzel font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl 2xl:text-7xl tracking-tight leading-[1.1] animate-fade-in">
             <span className="text-gold-400 drop-shadow-lg">Build your city.</span>
             <br />
             <span className="text-investoria-text">Grow your wealth.</span>
           </h1>
           
           <p className="mt-4 sm:mt-6 text-investoria-muted text-base sm:text-lg lg:text-xl leading-relaxed max-w-lg mx-auto lg:mx-0 animate-fade-in" style={{ animationDelay: '0.2s' }}>
-            Investoria turns investing into a living city. Each stock or ETF you choose becomes a building that grows and evolves over time — teaching you real investing habits in an approachable way.
+            Investoria turns real investing into a city you build. The stocks and ETFs you own shape your city — and your buildings
+            level up as you learn, stay invested, and earn achievements. It's a cozy city-builder, a market-learning layer, and a light strategy game in one.
           </p>
           
           <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start animate-fade-in" style={{ animationDelay: '0.4s' }}>
@@ -31,9 +38,9 @@ export default function Hero() {
             </button>
             <button 
               onClick={() => {
-                const featuresSection = document.getElementById('features');
-                if (featuresSection) {
-                  featuresSection.scrollIntoView({ 
+                const howSection = document.getElementById('how');
+                if (howSection) {
+                  howSection.scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'start'
                   });
@@ -41,7 +48,7 @@ export default function Hero() {
               }}
               className="text-investoria-muted hover:text-gold-400 font-medium transition-colors duration-200 flex items-center gap-2 group"
             >
-              Learn more
+              See how it works
               <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -49,7 +56,7 @@ export default function Hero() {
           </div>
           
           <p className="mt-6 text-xs text-investoria-muted/70">
-            Educational & fun. Not financial advice.
+            Pre-launch. Investing will be offered through a partner broker-dealer. Not financial advice.
           </p>
         </div>
 

@@ -1,9 +1,14 @@
 import { useState, useEffect } from 'react';
 import Header from './components/Header';
+import StagingBanner from './components/StagingBanner';
 import Hero from './components/Hero';
-import ProductShowcase from './components/ProductShowcase';
+import WhatIsInvestoria from './components/WhatIsInvestoria';
+import HowItWorks from './components/HowItWorks';
 import InteractiveDemo from './components/InteractiveDemo';
-import Features from './components/Features';
+import ProductSurfaces from './components/ProductSurfaces';
+import Onboarding from './components/Onboarding';
+import Trust from './components/Trust';
+import FAQ from './components/FAQ';
 import FinalCTA from './components/FinalCTA';
 import Footer from './components/Footer';
 import TermsOfService from './components/TermsOfService';
@@ -25,18 +30,29 @@ export default function InvestoriaLanding() {
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  // Handle routing - account for GitHub Pages base path
-  if (currentPath === '/Investoria-Website/terms' || currentPath === '/terms') {
-    return <TermsOfService />;
+  // Clean, custom-domain routes (reload-safe via the SPA fallback in 404.html).
+  if (currentPath === '/terms') {
+    return (
+      <>
+        <StagingBanner />
+        <TermsOfService />
+      </>
+    );
   }
-  
-  if (currentPath === '/Investoria-Website/privacy' || currentPath === '/privacy') {
-    return <PrivacyPolicy />;
+
+  if (currentPath === '/privacy') {
+    return (
+      <>
+        <StagingBanner />
+        <PrivacyPolicy />
+      </>
+    );
   }
 
   // Default landing page
   return (
     <div className="relative text-investoria-text antialiased min-h-screen">
+      <StagingBanner />
       {/* Animated gradient background */}
       <div className="fixed inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-green-800 via-green-900 to-green-1000 animate-gradient-shift"></div>
@@ -53,9 +69,13 @@ export default function InvestoriaLanding() {
       <Header />
       <main>
         <Hero />
-        <ProductShowcase />
+        <WhatIsInvestoria />
+        <HowItWorks />
         <InteractiveDemo />
-        <Features />
+        <ProductSurfaces />
+        <Onboarding />
+        <Trust />
+        <FAQ />
         <FinalCTA />
       </main>
       <Footer />

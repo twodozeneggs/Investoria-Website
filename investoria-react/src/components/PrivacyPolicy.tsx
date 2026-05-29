@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
         <div className="flex items-center justify-between">
           <button 
             onClick={() => {
-              window.history.pushState({}, '', '/Investoria-Website/');
+              window.history.pushState({}, '', '/');
               window.dispatchEvent(new PopStateEvent('popstate'));
             }}
             className="text-gold-400 hover:text-gold-300 transition-colors duration-200 flex items-center gap-2 cursor-pointer"
@@ -97,15 +97,18 @@ export default function PrivacyPolicy() {
               <h2 className="text-2xl font-bold text-gold-400 mb-4">3. Data Security and Protection</h2>
               <div className="bg-green-400/10 p-4 rounded-lg border border-green-400/30">
                 <p className="text-green-400 font-medium mb-2">
-                  <strong>Security Measures:</strong>
+                  <strong>Our approach to security:</strong>
                 </p>
                 <ul className="list-disc list-inside text-investoria-muted space-y-2 ml-4">
-                  <li>End-to-end encryption for sensitive financial data</li>
-                  <li>Multi-factor authentication for account access</li>
-                  <li>Regular security audits and penetration testing</li>
-                  <li>SOC 2 Type II compliance for data handling</li>
-                  <li>Employee background checks and security training</li>
+                  <li>Encryption of data in transit (HTTPS)</li>
+                  <li>Authentication and access controls for your account</li>
+                  <li>Reputable infrastructure providers (such as Google Firebase) for storage and authentication</li>
+                  <li>Access to personal data limited to what is needed to operate the service</li>
                 </ul>
+                <p className="text-investoria-muted text-sm mt-3">
+                  No method of transmission or storage is completely secure, and we cannot guarantee absolute security. As we move toward
+                  launch and offer investing features, we will strengthen these practices and update this policy accordingly.
+                </p>
               </div>
             </section>
 
@@ -171,10 +174,8 @@ export default function PrivacyPolicy() {
               </p>
               <div className="p-4 bg-green-800/30 rounded-lg">
                 <p className="text-investoria-muted">
-                  <strong className="text-gold-400">Investoria Privacy Team</strong><br />
-                  Email: privacy@investoria.com<br />
-                  Phone: 1-800-INVEST-1<br />
-                  Address: [Company Address]
+                  <strong className="text-gold-400">Investoria Privacy</strong><br />
+                  Email: simon@buildinvestoria.com
                 </p>
               </div>
             </section>
@@ -190,7 +191,7 @@ export default function PrivacyPolicy() {
 
           <div className="mt-8 text-center">
             <p className="text-xs text-investoria-muted/70 leading-relaxed">
-              <strong>Regulatory Compliance:</strong> Investoria complies with applicable privacy laws including CCPA, GDPR, and financial privacy regulations. Investment services provided through FINRA-registered broker-dealers.
+              <strong>Regulatory note:</strong> Investoria is pre-launch and works toward compliance with applicable privacy laws, including CCPA and GDPR where they apply. When investing becomes available, it is intended to be offered through a partner broker-dealer (member FINRA/SIPC).
             </p>
           </div>
         </div>

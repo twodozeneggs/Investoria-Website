@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 export default function FinalCTA() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitFailed, setSubmitFailed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<{email?: string; platform?: string}>({});
   const [email, setEmail] = useState('');
@@ -40,8 +41,6 @@ export default function FinalCTA() {
     setIsLoading(true);
     
     try {
-      console.log('Submitting email to Mailchimp:', email, 'Platform:', platform);
-      
       // Create a hidden form and submit it to Mailchimp
       const form = document.createElement('form');
       form.method = 'POST';
@@ -81,15 +80,20 @@ export default function FinalCTA() {
       document.body.appendChild(form);
       form.submit();
       document.body.removeChild(form);
-      
-      console.log('Email submitted to Mailchimp successfully');
+
+      // NOTE: Mailchimp's classic subscribe endpoint is submitted into a hidden
+      // cross-origin iframe, so the browser cannot read the response. We therefore
+      // cannot truly confirm success/failure from the client. We treat a completed
+      // submission as "received" and set honest, confirmation-style copy below
+      // rather than claiming a guaranteed signup.
       setIsSubmitted(true);
+      setSubmitFailed(false);
       e.currentTarget.reset();
-      
-    } catch (error) {
-      console.error('Subscription error:', error);
+      setEmail('');
+    } catch {
+      // Only reached if building/submitting the form itself threw.
       setIsSubmitted(true);
-      e.currentTarget.reset();
+      setSubmitFailed(true);
     } finally {
       setIsLoading(false);
     }
@@ -226,17 +230,31 @@ export default function FinalCTA() {
               </div>
             </form>
 
-            {/* Success message */}
-            {isSubmitted && (
+            {/* Confirmation message — honest about what we can and can't confirm client-side */}
+            {isSubmitted && !submitFailed && (
               <div className="mt-6 text-center p-6 bg-gradient-to-r from-gold-400/10 to-green-700/10 rounded-2xl ring-1 ring-gold-400/30 animate-pop">
                 <div className="flex items-center justify-center gap-3 mb-2">
                   <svg className="w-6 h-6 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  <span className="text-gold-400 font-bold text-lg">Welcome to the future!</span>
+                  <span className="text-gold-400 font-bold text-lg">Thanks — we've got your request</span>
                 </div>
                 <p className="text-investoria-muted">
-                  You're officially on the waitlist. We'll email you when it's time to build your empire.
+                  We're adding you to the Investoria waitlist. If you don't hear from us, email{' '}
+                  <a href="mailto:simon@buildinvestoria.com" className="text-gold-400 hover:underline">simon@buildinvestoria.com</a>{' '}
+                  and we'll sort it out.
+                </p>
+              </div>
+            )}
+
+            {/* Error fallback */}
+            {isSubmitted && submitFailed && (
+              <div className="mt-6 text-center p-6 bg-red-500/10 rounded-2xl ring-1 ring-red-400/30 animate-pop">
+                <p className="text-investoria-text font-medium mb-1">Something went wrong sending that.</p>
+                <p className="text-investoria-muted">
+                  Please try again, or email{' '}
+                  <a href="mailto:simon@buildinvestoria.com" className="text-gold-400 hover:underline">simon@buildinvestoria.com</a>{' '}
+                  to join the waitlist directly.
                 </p>
               </div>
             )}
@@ -246,7 +264,9 @@ export default function FinalCTA() {
         {/* Disclaimer */}
         <div className="text-center">
           <p className="text-sm text-investoria-muted/70 leading-relaxed max-w-2xl mx-auto">
-            Educational & entertainment; Not financial advice. We respect your privacy and will never spam you.
+            Investoria is pre-launch. Joining the waitlist doesn't open an account or move any money. When investing goes live it will be
+            offered through a partner broker-dealer; investing involves risk, including possible loss of principal. Not financial advice.
+            We respect your privacy and won't spam you.
           </p>
         </div>
       </div>

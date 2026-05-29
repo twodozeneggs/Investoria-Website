@@ -58,14 +58,8 @@ export default function InteractiveDemo() {
   
   // Signal to pause slideshows when city is complete
   useEffect(() => {
-    if (currentStep === 'complete') {
-      // Dispatch a custom event to pause slideshows
-      window.dispatchEvent(new CustomEvent('pauseSlideshows', { detail: true }));
-      console.log('🛑 PAUSING SLIDESHOWS - City completed');
-    } else {
-      // Resume slideshows when not complete
-      window.dispatchEvent(new CustomEvent('pauseSlideshows', { detail: false }));
-    }
+    // Pause any auto-advancing slideshows while the user is reading the completed city.
+    window.dispatchEvent(new CustomEvent('pauseSlideshows', { detail: currentStep === 'complete' }));
   }, [currentStep]);
   const [flippedTile, setFlippedTile] = useState<number | null>(null);
   const [placedBuilding, setPlacedBuilding] = useState(false);
@@ -77,22 +71,6 @@ export default function InteractiveDemo() {
   const [selectedItem, setSelectedItem] = useState<{item: any, type: TileType} | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [showStockInfo, setShowStockInfo] = useState(false);
-
-  // Global scroll monitor for debugging
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-    
-    const scrollMonitor = () => {
-      const newScrollY = window.scrollY;
-      if (newScrollY !== lastScrollY) {
-        console.log('📍 SCROLL CHANGE:', lastScrollY, '→', newScrollY, 'currentStep:', currentStep);
-        lastScrollY = newScrollY;
-      }
-    };
-    
-    window.addEventListener('scroll', scrollMonitor);
-    return () => window.removeEventListener('scroll', scrollMonitor);
-  }, [currentStep]);
 
   // Detect mobile device
   useEffect(() => {
@@ -109,56 +87,25 @@ export default function InteractiveDemo() {
   useEffect(() => {
     const filledTiles = grid.filter(tile => tile.type !== 'empty').length;
     if (filledTiles === 9 && currentStep !== 'complete') {
-      console.log('🎯 COMPLETION START: scrollY =', window.scrollY, 'isMobile =', isMobile);
-      
-      // Log viewport and element positions
-      const viewport = {
-        width: window.innerWidth,
-        height: window.innerHeight,
-        scrollY: window.scrollY,
-        scrollX: window.scrollX
-      };
-      console.log('📱 VIEWPORT:', viewport);
-      
       const timer = setTimeout(() => {
-        console.log('✅ COMPLETION DONE: setting step to complete');
         setCurrentStep('complete');
-        
-        // HYBRID APPROACH: Layout preservation + minimal padding for perfect positioning
+
+        // On mobile, add a little top padding so the completed-state header
+        // stays comfortably in view (preserves layout height, avoids a jump).
         setTimeout(() => {
-          console.log('✅ LAYOUT FIX: Adding spacing for mobile completion');
-          
           const header = document.getElementById('city-builder-header');
           if (header && isMobile) {
-            const headerRect = header.getBoundingClientRect();
-            console.log('📱 Header position before layout fix:', {
-              top: headerRect.top,
-              scrollY: window.scrollY
-            });
-            
-            // Add top padding to the section to push content down
             const section = header.closest('section');
             if (section) {
-              section.style.paddingTop = '50px'; // Minimal padding since we're preserving layout height
-              console.log('✅ Added extra padding to section');
-              
-              // Verify the fix
-              setTimeout(() => {
-                const newRect = header.getBoundingClientRect();
-                console.log('🎯 Header position after layout fix:', {
-                  top: newRect.top,
-                  isVisible: newRect.top >= 0 && newRect.top < window.innerHeight,
-                  success: newRect.top >= 80 && newRect.top <= 200
-                });
-              }, 100);
+              section.style.paddingTop = '50px';
             }
           }
         }, 100);
       }, 350);
-      
+
       return () => clearTimeout(timer);
     }
-  }, [grid, currentStep]);
+  }, [grid, currentStep, isMobile]);
 
   const stockBuildings: StockBuilding[] = [
     {
@@ -379,8 +326,8 @@ export default function InteractiveDemo() {
         if (tile.type === 'empty') {
           handlePlacement(gridIndex, data.item, data.type);
         }
-      } catch (error) {
-        console.error('Error handling drop:', error);
+      } catch {
+        // Ignore malformed drag payloads.
       }
     }
   };
@@ -448,7 +395,6 @@ export default function InteractiveDemo() {
 
   const handleGridFlip = () => {
     if (currentStep !== 'complete') return;
-    console.log('🔄 GRID FLIP: showStockInfo =', showStockInfo);
     setShowStockInfo(!showStockInfo);
   };
 
@@ -567,8 +513,8 @@ export default function InteractiveDemo() {
           Try Building Your City
         </h2>
         <p className="text-investoria-muted text-lg max-w-2xl mx-auto">
-          Experience how Investoria turns your investments into a living, breathing city. 
-          Choose stocks, add terrain, and place pets to create your unique financial world.
+          A quick taste of the idea: pick a sector to place a building, then add terrain and city life around it.
+          In the app, the companies and ETFs you own shape your city — and your buildings level up as you learn and stay invested.
         </p>
       </div>
 

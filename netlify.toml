@@ -1,0 +1,30 @@
+# Netlify config for the Investoria STAGING/preview deploy.
+#
+# This file is ONLY consumed by Netlify. It does NOT affect the production
+# GitHub Pages deployment (gh-pages branch) or the custom domain (CNAME).
+#
+# The React/Vite app lives in the investoria-react/ subdirectory, so Netlify's
+# base directory is set accordingly.
+
+[build]
+  base = "investoria-react"
+  command = "npm run build"
+  publish = "dist"            # relative to `base` -> investoria-react/dist
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Flips on the STAGING banner + runtime noindex in the app (staging only).
+  VITE_STAGING = "true"
+
+# SPA fallback so deep links like /terms and /privacy load index.html and let
+# the client router resolve them (no need for the GitHub Pages 404.html hack here).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Keep the staging site out of search engines while it's publicly reachable.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"
