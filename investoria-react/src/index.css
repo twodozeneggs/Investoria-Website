@@ -51,6 +51,34 @@ html {
   animation: fade-in 0.6s ease-out;
 }
 
+/* Building showcase: seamless horizontal drift.
+   The track renders its buildings twice; shifting by -50% loops perfectly.
+   Rightward rows reuse this keyframe with `animation-direction: reverse`. */
+@keyframes building-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.building-marquee-track {
+  animation-name: building-marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* If the user prefers reduced motion, never auto-scroll the parade. The rows
+   fall back to a static, horizontally scrollable strip (handled in React). */
+@media (prefers-reduced-motion: reduce) {
+  .building-marquee-track {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
 html, body {
   height: 100%;
   margin: 0;

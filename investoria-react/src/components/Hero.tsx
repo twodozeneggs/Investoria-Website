@@ -60,12 +60,30 @@ export default function Hero() {
           </p>
         </div>
 
-        <div className="lg:order-last">
-          <img 
-            src="./Demo-collection.png" 
-            alt="Investoria app demo collection showing multiple phone screens"
-            className="w-full max-w-lg mx-auto"
-          />
+        {/* Hero city visual */}
+        <div className="lg:order-last flex items-center justify-center">
+          <div className="relative w-full max-w-[480px] mx-auto">
+            {/* Deep city glow behind the image */}
+            <div
+              className="pointer-events-none absolute -inset-8 rounded-full blur-3xl opacity-50"
+              style={{ background: 'radial-gradient(ellipse at 55% 45%, rgba(212,175,55,0.22) 0%, rgba(31,90,52,0.3) 50%, transparent 80%)' }}
+            />
+            {/* Outer frame ring — hints at a "screen" without being a phone */}
+            <div className="relative rounded-3xl bg-green-1000/70 p-2 ring-1 ring-gold-400/20 shadow-[0_40px_80px_rgba(0,0,0,0.55)]">
+              <img
+                src="/app-screenshots/bigcity.png"
+                alt="Investoria city view — a pixel-art city built from your real investment portfolio"
+                loading="eager"
+                decoding="async"
+                className="w-full rounded-[1.4rem] object-cover"
+              />
+            </div>
+            {/* Floating badge — city-builder framing */}
+            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 rounded-2xl bg-green-900/90 backdrop-blur-sm px-3 py-2 ring-1 ring-gold-400/25 shadow-lg flex items-center gap-2">
+              <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
+              <span className="text-xs font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
