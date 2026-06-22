@@ -1,32 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import PlaceholderVisual from './PlaceholderVisual';
-
-// The five city forces ("Pulse"), confirmed in the product. Used for the Pulse mock.
-const pulseForces = [
-  { label: 'Population', color: '#5B8DEF', level: 72 },
-  { label: 'Happiness', color: '#F1B23E', level: 58 },
-  { label: 'Health', color: '#EC6A9C', level: 64 },
-  { label: 'Science', color: '#A78BFA', level: 81 },
-  { label: 'Commerce', color: '#34D399', level: 49 },
-];
-
-/** A small on-brand mock of the Pulse stat grid (placeholder for the real screen). */
-function PulseMock() {
-  return (
-    <div className="flex h-full w-full flex-col gap-2">
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-gold-300/80">City Pulse</div>
-      {pulseForces.map((f) => (
-        <div key={f.label} className="flex items-center gap-2">
-          <span className="h-2 w-2 flex-shrink-0 rounded-full" style={{ backgroundColor: f.color }} />
-          <span className="w-20 flex-shrink-0 text-[11px] text-investoria-text/90">{f.label}</span>
-          <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/10">
-            <span className="block h-full rounded-full" style={{ width: `${f.level}%`, backgroundColor: f.color, opacity: 0.8 }} />
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
+import AppScreenshot from './AppScreenshot';
 
 interface Surface {
   id: string;
@@ -34,10 +7,11 @@ interface Surface {
   title: string;
   body: string;
   points: string[];
-  placeholderLabel: string;
-  placeholderCaption: string;
   accent: 'gold' | 'green';
-  mock?: React.ReactNode;
+  screenshot: string;
+  screenshotAlt: string;
+  /** Use a wide card frame instead of phone bezel (for city/map views). */
+  wide?: boolean;
 }
 
 const surfaces: Surface[] = [
@@ -51,9 +25,9 @@ const surfaces: Surface[] = [
       'Each holding maps to a building you recognize',
       'Beginner-friendly framing, never dumbed down',
     ],
-    placeholderLabel: 'Stock detail',
-    placeholderCaption: 'A company/ETF detail screen with its city role.',
     accent: 'gold',
+    screenshot: '/app-screenshots/real-investing-made-approachable.png',
+    screenshotAlt: 'Investoria stock detail screen — a real company with its city role explained in plain language',
   },
   {
     id: 'city',
@@ -62,41 +36,41 @@ const surfaces: Surface[] = [
     body: 'Place and arrange your buildings, add terrain and city life, and watch your portfolio become a town with real character. Your sector mix shapes the look and feel of your city.',
     points: [
       'Holdings become buildings you can place',
-      'Sector mix shapes your city’s character',
+      'Sector mix shapes your city\u2019s character',
       'Cozy customization with terrain and city life',
     ],
-    placeholderLabel: 'City view',
-    placeholderCaption: 'The main city map with placed buildings and terrain.',
     accent: 'green',
+    screenshot: '/app-screenshots/your-portfolio-as-a-place.png',
+    screenshotAlt: 'Investoria portfolio city view — a pixel-art city built from your real holdings',
+    wide: true,
   },
   {
     id: 'pulse',
     eyebrow: 'Pulse',
     title: 'The vital signs of your city',
-    body: 'Pulse shows how your city is doing across five forces — Population, Happiness, Health, Science, and Commerce. It’s a friendly way to understand your portfolio’s balance, character, and progress at a glance.',
+    body: 'Pulse shows how your city is doing across five forces — Population, Happiness, Health, Science, and Commerce. It\u2019s a friendly way to understand your portfolio\u2019s balance, character, and progress at a glance.',
     points: [
       'Five city forces summarize your portfolio',
       'See which sides of your city are thriving or quiet',
       'Tap a force to learn the companies behind it',
     ],
-    placeholderLabel: 'Pulse dashboard',
-    placeholderCaption: 'The five-force Pulse dashboard.',
     accent: 'gold',
-    mock: <PulseMock />,
+    screenshot: '/app-screenshots/vital-signs-of-your-city.png',
+    screenshotAlt: 'Investoria Pulse dashboard — five city health forces showing portfolio balance at a glance',
   },
   {
     id: 'explore',
     eyebrow: 'Explore',
     title: 'Discover without the screener',
-    body: 'Explore helps you find companies, sectors, and ideas in a calm, browsable way. It’s discovery for curious beginners — not a dense, intimidating stock screener.',
+    body: 'Explore helps you find companies, sectors, and ideas in a calm, browsable way. It\u2019s discovery for curious beginners — not a dense, intimidating stock screener.',
     points: [
       'Browse by sector, themes, and market pulse',
       'Plain-English company context, not raw data dumps',
-      'Discover ideas that fit the city you’re building',
+      'Discover ideas that fit the city you\u2019re building',
     ],
-    placeholderLabel: 'Explore screen',
-    placeholderCaption: 'The Explore tab: sectors, themes, and discovery.',
     accent: 'green',
+    screenshot: '/app-screenshots/discover.png',
+    screenshotAlt: 'Investoria Explore screen — browse companies and sectors in a calm, beginner-friendly way',
   },
   {
     id: 'xp',
@@ -108,9 +82,9 @@ const surfaces: Surface[] = [
       'Achievements for milestones like your first building and steady holding',
       'Engagement and learning drive progression',
     ],
-    placeholderLabel: 'Building level-up',
-    placeholderCaption: 'A building leveling up with an achievement.',
     accent: 'gold',
+    screenshot: '/app-screenshots/progress.png',
+    screenshotAlt: 'Investoria XP and achievements screen — a building leveling up with a milestone celebration',
   },
 ];
 
@@ -126,16 +100,15 @@ function SurfaceRow({ surface, index }: { surface: Surface; index: number }) {
       }`}
     >
       {/* Visual */}
-      <div className={`relative ${imageFirst ? 'lg:order-first' : 'lg:order-last'}`}>
+      <div className={`relative flex items-center justify-center ${imageFirst ? 'lg:order-first' : 'lg:order-last'}`}>
         <div className="pointer-events-none absolute -top-6 -left-6 w-40 h-40 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl" />
-        <PlaceholderVisual
-          label={surface.placeholderLabel}
-          caption={surface.placeholderCaption}
+        <AppScreenshot
+          src={surface.screenshot}
+          alt={surface.screenshotAlt}
           accent={surface.accent}
-          phone
-        >
-          {surface.mock}
-        </PlaceholderVisual>
+          wide={surface.wide}
+          className={surface.wide ? 'max-w-md' : ''}
+        />
       </div>
 
       {/* Copy */}

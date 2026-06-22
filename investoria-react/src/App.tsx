@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import WhatIsInvestoria from './components/WhatIsInvestoria';
 import HowItWorks from './components/HowItWorks';
 import InteractiveDemo from './components/InteractiveDemo';
+import BuildingShowcase from './components/buildingShowcase/BuildingShowcase';
 import ProductSurfaces from './components/ProductSurfaces';
 import Onboarding from './components/Onboarding';
 import Trust from './components/Trust';
@@ -72,6 +73,7 @@ export default function InvestoriaLanding() {
         <WhatIsInvestoria />
         <HowItWorks />
         <InteractiveDemo />
+        <BuildingShowcase />
         <ProductSurfaces />
         <Onboarding />
         <Trust />

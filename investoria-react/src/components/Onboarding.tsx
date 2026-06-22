@@ -1,5 +1,5 @@
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import PlaceholderVisual from './PlaceholderVisual';
+import AppScreenshot from './AppScreenshot';
 
 const tracks = [
   {
@@ -62,12 +62,12 @@ export default function Onboarding() {
           </div>
 
           {/* Visual */}
-          <div className="relative lg:order-last">
+          <div className="relative lg:order-last flex items-center justify-center">
             <div className="pointer-events-none absolute -top-6 -right-6 w-40 h-40 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-2xl" />
-            {/* PLACEHOLDER: swap for a real onboarding / choose-your-path screenshot */}
-            <PlaceholderVisual
-              label="Choose your path"
-              caption="The onboarding screen where new investors pick a track and starter theme."
+            <AppScreenshot
+              src="/app-screenshots/startwhereyouare.png"
+              alt="Investoria onboarding — choose your investing track: guided for beginners, balanced, or expert fast-track"
+              accent="gold"
             />
           </div>
         </div>
