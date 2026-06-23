@@ -10,8 +10,6 @@ interface Surface {
   accent: 'gold' | 'green';
   screenshot: string;
   screenshotAlt: string;
-  /** Use a wide card frame instead of phone bezel (for city/map views). */
-  wide?: boolean;
 }
 
 const surfaces: Surface[] = [
@@ -42,7 +40,6 @@ const surfaces: Surface[] = [
     accent: 'green',
     screenshot: '/app-screenshots/your-portfolio-as-a-place.png',
     screenshotAlt: 'Investoria portfolio city view — a pixel-art city built from your real holdings',
-    wide: true,
   },
   {
     id: 'pulse',
@@ -106,8 +103,6 @@ function SurfaceRow({ surface, index }: { surface: Surface; index: number }) {
           src={surface.screenshot}
           alt={surface.screenshotAlt}
           accent={surface.accent}
-          wide={surface.wide}
-          className={surface.wide ? 'max-w-md' : ''}
         />
       </div>
 

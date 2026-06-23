@@ -77,11 +77,11 @@ export default function Hero() {
                 decoding="async"
                 className="w-full rounded-[1.4rem] object-cover"
               />
-            </div>
-            {/* Floating badge — city-builder framing */}
-            <div className="absolute -bottom-3 -left-3 sm:-bottom-4 sm:-left-4 rounded-2xl bg-green-900/90 backdrop-blur-sm px-3 py-2 ring-1 ring-gold-400/25 shadow-lg flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
-              <span className="text-xs font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
+              {/* Caption badge — inside the card, safe from overflow clipping */}
+              <div className="absolute top-4 right-4 rounded-xl bg-black/50 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/25 flex items-center gap-1.5">
+                <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
+                <span className="text-[11px] font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
+              </div>
             </div>
           </div>
         </div>

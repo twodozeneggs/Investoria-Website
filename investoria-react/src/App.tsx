@@ -73,8 +73,8 @@ export default function InvestoriaLanding() {
         <WhatIsInvestoria />
         <HowItWorks />
         <InteractiveDemo />
-        <BuildingShowcase />
         <ProductSurfaces />
+        <BuildingShowcase />
         <Onboarding />
         <Trust />
         <FAQ />
