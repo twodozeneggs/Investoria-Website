@@ -1,4 +1,9 @@
+import { useState } from 'react';
+import Lightbox from './Lightbox';
+
 export default function Hero() {
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
   return (
     <section className="relative min-h-[88vh] xl:min-h-[78vh] 2xl:min-h-[68vh] flex items-center overflow-hidden">
 
@@ -68,13 +73,21 @@ export default function Hero() {
               alt="Investoria city view — a pixel-art city built from your real investment portfolio"
               loading="eager"
               decoding="async"
-              className="w-full object-cover"
+              onClick={() => setLightboxOpen(true)}
+              className="w-full object-cover cursor-zoom-in"
             />
             {/* Caption badge — overlaid on the image */}
-            <div className="absolute top-4 right-4 rounded-xl bg-black/55 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/30 flex items-center gap-1.5">
+            <div className="absolute top-4 right-4 rounded-xl bg-black/55 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/30 flex items-center gap-1.5 pointer-events-none">
               <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
               <span className="text-[11px] font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
             </div>
+            {lightboxOpen && (
+              <Lightbox
+                src="/app-screenshots/bigcity.png"
+                alt="Investoria city view — a pixel-art city built from your real investment portfolio"
+                onClose={() => setLightboxOpen(false)}
+              />
+            )}
           </div>
         </div>
       </div>
