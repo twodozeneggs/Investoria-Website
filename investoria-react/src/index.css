@@ -52,14 +52,15 @@ html {
 }
 
 /* Building showcase: seamless horizontal drift.
-   The track renders its buildings twice; shifting by -50% loops perfectly.
+   The track renders buildings 4×; shifting by -25% (= 1 copy width) loops
+   perfectly and guarantees the row always fills any viewport width.
    Rightward rows reuse this keyframe with `animation-direction: reverse`. */
 @keyframes building-marquee {
   from {
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-50%, 0, 0);
+    transform: translate3d(-25%, 0, 0);
   }
 }
 

@@ -70,6 +70,9 @@ interface BuildingMarqueeRowProps {
   buildings: ShowcaseBuilding[];
   direction: 'left' | 'right';
   durationSec: number;
+  /** Negative animation-delay in seconds so the row starts mid-animation,
+   *  preventing all rows from snapping to position 0 simultaneously on load. */
+  startOffsetSec: number;
   selectedId: string | null;
   onSelect: (b: ShowcaseBuilding) => void;
   /** Globally pause (e.g. while the detail modal is open). */
@@ -83,6 +86,7 @@ export default function BuildingMarqueeRow({
   buildings,
   direction,
   durationSec,
+  startOffsetSec,
   selectedId,
   onSelect,
   paused,
@@ -99,17 +103,23 @@ export default function BuildingMarqueeRow({
         animationDuration: `${durationSec}s`,
         animationDirection: direction === 'right' ? 'reverse' : 'normal',
         animationPlayState: isPaused ? 'paused' : 'running',
+        // Negative delay puts the animation mid-scroll from the first frame,
+        // so the row never starts at position 0 and looks different from its neighbours.
+        animationDelay: `-${startOffsetSec}s`,
       };
 
-  const renderCopy = (duplicate: boolean) =>
+  // Render the canonical set (index 0, interactive) plus 3 duplicates
+  // (hidden from AT). 4 copies + a -25% keyframe means the track is always
+  // wider than any realistic viewport, so no gap ever appears.
+  const renderCopy = (copyIndex: number) =>
     buildings.map((b) => (
       <BuildingTile
-        key={`${duplicate ? 'dup-' : ''}${b.id}`}
+        key={`${copyIndex}-${b.id}`}
         building={b}
         isSelected={selectedId === b.id}
         onSelect={onSelect}
         gap={GAP}
-        duplicate={duplicate}
+        duplicate={copyIndex > 0}
       />
     ));
 
@@ -125,9 +135,10 @@ export default function BuildingMarqueeRow({
         className={reducedMotion ? 'flex w-max py-3' : 'building-marquee-track flex w-max py-3'}
         style={trackStyle}
       >
-        {renderCopy(false)}
-        {/* Duplicate set creates the seamless loop; hidden from assistive tech. */}
-        {!reducedMotion && renderCopy(true)}
+        {renderCopy(0)}
+        {!reducedMotion && renderCopy(1)}
+        {!reducedMotion && renderCopy(2)}
+        {!reducedMotion && renderCopy(3)}
       </div>
     </div>
   );

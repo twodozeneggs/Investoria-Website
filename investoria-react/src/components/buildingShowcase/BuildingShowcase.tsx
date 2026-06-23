@@ -6,10 +6,10 @@ import BuildingDetailModal from './BuildingDetailModal';
 import { rowBuildings } from './buildingShowcaseData';
 import type { ShowcaseBuilding } from './buildingShowcaseData';
 
-const ROWS: { direction: 'left' | 'right'; durationSec: number; row: 1 | 2 | 3 }[] = [
-  { row: 1, direction: 'right', durationSec: 72 },
-  { row: 2, direction: 'left', durationSec: 82 },
-  { row: 3, direction: 'right', durationSec: 64 },
+const ROWS: { direction: 'left' | 'right'; durationSec: number; startOffsetSec: number; row: 1 | 2 | 3 }[] = [
+  { row: 1, direction: 'right', durationSec: 72,  startOffsetSec: 24  }, // ~33% in
+  { row: 2, direction: 'left',  durationSec: 82,  startOffsetSec: 55  }, // ~67% in
+  { row: 3, direction: 'right', durationSec: 64,  startOffsetSec: 12  }, // ~19% in
 ];
 
 export default function BuildingShowcase() {
@@ -52,12 +52,13 @@ export default function BuildingShowcase() {
         <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-green-900 to-transparent sm:w-28" />
 
         <div className="mx-auto flex max-w-[1600px] flex-col gap-2 px-2 sm:gap-3">
-          {ROWS.map(({ row, direction, durationSec }) => (
+          {ROWS.map(({ row, direction, durationSec, startOffsetSec }) => (
             <BuildingMarqueeRow
               key={row}
               buildings={rowBuildings(row)}
               direction={direction}
               durationSec={durationSec}
+              startOffsetSec={startOffsetSec}
               selectedId={selected?.id ?? null}
               onSelect={setSelected}
               paused={selected !== null}
