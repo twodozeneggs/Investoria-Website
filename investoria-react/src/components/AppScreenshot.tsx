@@ -23,7 +23,7 @@ export default function AppScreenshot({
       alt={alt}
       loading={lazy ? 'lazy' : 'eager'}
       decoding="async"
-      className={`block w-full max-w-[460px] mx-auto aspect-square rounded-2xl object-cover shadow-[0_20px_48px_rgba(0,0,0,0.38)] ${className}`}
+      className={`block w-full max-w-[460px] mx-auto aspect-square object-cover ${className}`}
     />
   );
 }
