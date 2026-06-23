@@ -60,28 +60,26 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Hero city visual */}
+        {/* Hero city visual — direct, no decorative frame */}
         <div className="lg:order-last flex items-center justify-center">
-          <div className="relative w-full max-w-[480px] mx-auto">
-            {/* Deep city glow behind the image */}
+          <div className="relative w-full max-w-[580px] mx-auto">
+            {/* Ambient city glow — sits behind the image */}
             <div
-              className="pointer-events-none absolute -inset-8 rounded-full blur-3xl opacity-50"
-              style={{ background: 'radial-gradient(ellipse at 55% 45%, rgba(212,175,55,0.22) 0%, rgba(31,90,52,0.3) 50%, transparent 80%)' }}
+              aria-hidden
+              className="pointer-events-none absolute -inset-10 rounded-full blur-3xl opacity-45"
+              style={{ background: 'radial-gradient(ellipse at 55% 45%, rgba(212,175,55,0.25) 0%, rgba(31,90,52,0.35) 50%, transparent 80%)' }}
             />
-            {/* Outer frame ring — hints at a "screen" without being a phone */}
-            <div className="relative rounded-3xl bg-green-1000/70 p-2 ring-1 ring-gold-400/20 shadow-[0_40px_80px_rgba(0,0,0,0.55)]">
-              <img
-                src="/app-screenshots/bigcity.png"
-                alt="Investoria city view — a pixel-art city built from your real investment portfolio"
-                loading="eager"
-                decoding="async"
-                className="w-full rounded-[1.4rem] object-cover"
-              />
-              {/* Caption badge — inside the card, safe from overflow clipping */}
-              <div className="absolute top-4 right-4 rounded-xl bg-black/50 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/25 flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
-                <span className="text-[11px] font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
-              </div>
+            <img
+              src="/app-screenshots/bigcity.png"
+              alt="Investoria city view — a pixel-art city built from your real investment portfolio"
+              loading="eager"
+              decoding="async"
+              className="relative w-full rounded-3xl shadow-[0_40px_80px_rgba(0,0,0,0.55)] object-cover"
+            />
+            {/* Caption badge — over the image, never clipped */}
+            <div className="absolute top-4 right-4 rounded-xl bg-black/55 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/30 flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
+              <span className="text-[11px] font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>
             </div>
           </div>
         </div>
