@@ -104,8 +104,8 @@ function SurfaceRow({ surface, index }: { surface: Surface; index: number }) {
         />
       </div>
 
-      {/* Copy */}
-      <div>
+      {/* Copy — subtle glass card for structure */}
+      <div className="rounded-2xl bg-white/5 ring-1 ring-white/8 backdrop-blur-sm px-7 py-8">
         <span className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-300/80">{surface.eyebrow}</span>
         <h3 className="font-cinzel font-bold text-2xl sm:text-3xl text-gold-400 mt-2 mb-4">{surface.title}</h3>
         <p className="text-investoria-muted text-lg leading-relaxed mb-6">{surface.body}</p>
