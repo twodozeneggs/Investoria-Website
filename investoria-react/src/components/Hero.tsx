@@ -68,7 +68,7 @@ export default function Hero() {
               alt="Investoria city view — a pixel-art city built from your real investment portfolio"
               loading="eager"
               decoding="async"
-              className="w-full rounded-3xl shadow-[0_32px_72px_rgba(0,0,0,0.5)] object-cover"
+              className="w-full object-cover"
             />
             {/* Caption badge — overlaid on the image */}
             <div className="absolute top-4 right-4 rounded-xl bg-black/55 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/30 flex items-center gap-1.5">
