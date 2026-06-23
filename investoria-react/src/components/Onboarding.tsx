@@ -62,12 +62,10 @@ export default function Onboarding() {
           </div>
 
           {/* Visual */}
-          <div className="relative lg:order-last flex items-center justify-center">
-            <div className="pointer-events-none absolute -top-6 -right-6 w-40 h-40 bg-gradient-radial from-gold-400/10 to-transparent rounded-full blur-2xl" />
+          <div className="lg:order-last">
             <AppScreenshot
               src="/app-screenshots/startwhereyouare.png"
               alt="Investoria onboarding — choose your investing track: guided for beginners, balanced, or expert fast-track"
-              accent="gold"
             />
           </div>
         </div>

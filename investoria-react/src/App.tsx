@@ -3,7 +3,8 @@ import Header from './components/Header';
 import StagingBanner from './components/StagingBanner';
 import Hero from './components/Hero';
 import WhatIsInvestoria from './components/WhatIsInvestoria';
-import HowItWorks from './components/HowItWorks';
+// HowItWorks hidden until a stronger visual is ready
+// import HowItWorks from './components/HowItWorks';
 import InteractiveDemo from './components/InteractiveDemo';
 import BuildingShowcase from './components/buildingShowcase/BuildingShowcase';
 import ProductSurfaces from './components/ProductSurfaces';
@@ -71,7 +72,6 @@ export default function InvestoriaLanding() {
       <main>
         <Hero />
         <WhatIsInvestoria />
-        <HowItWorks />
         <InteractiveDemo />
         <ProductSurfaces />
         <BuildingShowcase />

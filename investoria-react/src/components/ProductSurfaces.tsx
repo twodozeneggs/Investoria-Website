@@ -97,12 +97,10 @@ function SurfaceRow({ surface, index }: { surface: Surface; index: number }) {
       }`}
     >
       {/* Visual */}
-      <div className={`relative flex items-center justify-center ${imageFirst ? 'lg:order-first' : 'lg:order-last'}`}>
-        <div className="pointer-events-none absolute -top-6 -left-6 w-40 h-40 bg-gradient-radial from-green-700/20 to-transparent rounded-full blur-2xl" />
+      <div className={`${imageFirst ? 'lg:order-first' : 'lg:order-last'}`}>
         <AppScreenshot
           src={surface.screenshot}
           alt={surface.screenshotAlt}
-          accent={surface.accent}
         />
       </div>
 

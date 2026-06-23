@@ -38,9 +38,9 @@ export default function Hero() {
             </button>
             <button 
               onClick={() => {
-                const howSection = document.getElementById('how');
-                if (howSection) {
-                  howSection.scrollIntoView({ 
+                const demoSection = document.getElementById('demo');
+                if (demoSection) {
+                  demoSection.scrollIntoView({ 
                     behavior: 'smooth',
                     block: 'start'
                   });
@@ -48,7 +48,7 @@ export default function Hero() {
               }}
               className="text-investoria-muted hover:text-gold-400 font-medium transition-colors duration-200 flex items-center gap-2 group"
             >
-              See how it works
+              Try the demo
               <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -60,23 +60,17 @@ export default function Hero() {
           </p>
         </div>
 
-        {/* Hero city visual — direct, no decorative frame */}
+        {/* Hero city visual — direct image, no wrapper card */}
         <div className="lg:order-last flex items-center justify-center">
-          <div className="relative w-full max-w-[580px] mx-auto">
-            {/* Ambient city glow — sits behind the image */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -inset-10 rounded-full blur-3xl opacity-45"
-              style={{ background: 'radial-gradient(ellipse at 55% 45%, rgba(212,175,55,0.25) 0%, rgba(31,90,52,0.35) 50%, transparent 80%)' }}
-            />
+          <div className="relative w-full max-w-[560px] mx-auto">
             <img
               src="/app-screenshots/bigcity.png"
               alt="Investoria city view — a pixel-art city built from your real investment portfolio"
               loading="eager"
               decoding="async"
-              className="relative w-full rounded-3xl shadow-[0_40px_80px_rgba(0,0,0,0.55)] object-cover"
+              className="w-full rounded-3xl shadow-[0_32px_72px_rgba(0,0,0,0.5)] object-cover"
             />
-            {/* Caption badge — over the image, never clipped */}
+            {/* Caption badge — overlaid on the image */}
             <div className="absolute top-4 right-4 rounded-xl bg-black/55 backdrop-blur-sm px-3 py-1.5 ring-1 ring-gold-400/30 flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-gold-400 animate-pulse flex-shrink-0" />
               <span className="text-[11px] font-semibold text-gold-300 whitespace-nowrap">Your city. Your portfolio.</span>

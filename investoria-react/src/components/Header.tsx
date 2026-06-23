@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 const navLinks = [
-  { label: 'How It Works', id: 'how' },
   { label: 'Try It', id: 'demo' },
   { label: 'Features', id: 'surfaces' },
   { label: 'Trust', id: 'trust' },
@@ -26,7 +25,7 @@ export default function Header() {
 
   // Highlight active nav link based on scroll position
   useEffect(() => {
-    const ids = ['what', 'how', 'demo', 'surfaces', 'onboarding', 'trust', 'faq', 'waitlist'];
+    const ids = ['what', 'demo', 'surfaces', 'onboarding', 'trust', 'faq', 'waitlist'];
     const onScroll = () => {
       const scrollY = window.scrollY + 120;
       let current = '';

@@ -1,51 +1,29 @@
 /**
- * AppScreenshot
- * -------------
- * Shows a real app screenshot directly — no decorative phone bezel.
- * The screenshots already have phone chrome (status bars, nav bars) baked in,
- * so the only styling applied is rounded corners, a soft shadow, and an
- * accent glow. The image is the star.
- *
- * All screenshots are 1024×1024 so `aspect-square` is used internally.
+ * AppScreenshot — renders a real app screenshot with no decorative wrapper.
+ * All screenshots are 1024×1024 with phone chrome baked in.
+ * The only polish: rounded corners + drop shadow.
  */
-
 interface AppScreenshotProps {
   src: string;
   alt: string;
-  /** Gold or green glow tint — matches the surrounding section accent. */
-  accent?: 'gold' | 'green';
+  accent?: 'gold' | 'green'; // kept for API compatibility, unused visually
   className?: string;
-  /** Lazy-load for below-fold images (default true). */
   lazy?: boolean;
 }
 
 export default function AppScreenshot({
   src,
   alt,
-  accent = 'gold',
   className = '',
   lazy = true,
 }: AppScreenshotProps) {
-  const glowColor =
-    accent === 'gold' ? 'rgba(212,175,55,0.20)' : 'rgba(52,211,153,0.18)';
-
   return (
-    <div className={`relative mx-auto w-full max-w-[440px] ${className}`}>
-      {/* Soft ambient glow — stays behind the image */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -inset-8 rounded-3xl blur-3xl opacity-50"
-        style={{
-          background: `radial-gradient(ellipse at 60% 40%, ${glowColor} 0%, transparent 65%)`,
-        }}
-      />
-      <img
-        src={src}
-        alt={alt}
-        loading={lazy ? 'lazy' : 'eager'}
-        decoding="async"
-        className="relative w-full aspect-square rounded-2xl object-cover shadow-[0_24px_56px_rgba(0,0,0,0.45)]"
-      />
-    </div>
+    <img
+      src={src}
+      alt={alt}
+      loading={lazy ? 'lazy' : 'eager'}
+      decoding="async"
+      className={`block w-full max-w-[460px] mx-auto aspect-square rounded-2xl object-cover shadow-[0_20px_48px_rgba(0,0,0,0.38)] ${className}`}
+    />
   );
 }
